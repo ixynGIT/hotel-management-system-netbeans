@@ -354,13 +354,14 @@ public class login extends javax.swing.JFrame {
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
        int coordX = evt.getXOnScreen();
        int coordY = evt.getYOnScreen();
-       this.setLocation(coordX-mouseX, coordY-mouseY);   
-        
        
+       this.setLocation(coordX-mouseX, coordY-mouseY);    
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        // TODO add your handling code here:
+        mouseX = evt.getX();
+        mouseY = evt.getY();
+
     }//GEN-LAST:event_formMousePressed
 
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
