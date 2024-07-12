@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/e8cadc48-cd16-4390-83e7-fe1a2fdc2e6d)![image](https://github.com/user-attachments/assets/dab4375f-7b7b-4d72-a5cc-342e3e1888d2)![image](https://github.com/user-attachments/assets/879a36a3-7f59-49b6-80b0-582a1010cbdb)# CHPATEL HOTEL MANAGEMENT SYSTEM
+## CHPATEL HOTEL MANAGEMENT SYSTEM
 
 A hotel management made in the compliance for final grading in school.
 
