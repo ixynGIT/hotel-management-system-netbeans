@@ -15,8 +15,7 @@ A hotel management made in the compliance for final grading in school.
     
 3. Open the project `Ctrl+Shift+O`
    Navigate through the cloned project and access the project folder.
-   
-    ```
+
 ## Usage
 
 1. Run the project.
