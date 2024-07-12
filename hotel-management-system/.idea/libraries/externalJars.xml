@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="externalJars">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/classes/UI/externalJars/joda-time-2.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/build/classes/UI/externalJars/mysql-connector-j-8.0.33.jar!/" />
+      <root url="jar://$PROJECT_DIR$/build/classes/UI/externalJars/commons-lang3-3.12.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/build/classes/UI/externalJars/rs2xml.jar!/" />
+      <root url="jar://$PROJECT_DIR$/build/classes/UI/externalJars/swingx-all-1.6.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/build/classes/UI/externalJars/jcalendar-1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
