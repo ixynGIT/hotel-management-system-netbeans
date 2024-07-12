@@ -27,9 +27,9 @@ A hotel management made in the compliance for final grading in school.
 
 1. Login:
 We created a register and forgot page. The data saved will go directly in the users section which all the admins have the access to edit the saved informations freely.
-
+<img src="path-to-image.jpg" alt="Description of the image">
 **Login**
-![Login](screenshots/login.png)
+
 
 3. Check-in and Check-out module:
   Get necessary Details from the Customer for proper data and archive. Calculate the cost of their stay instantly with automized calculation of customer stay.
