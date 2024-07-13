@@ -318,6 +318,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         paid.setEditable(false);
         jPanel1.add(paid, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 190, 140, -1));
 
+        fullname.setEditable(false);
         fullname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel1.add(fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, 290, -1));
 
@@ -516,12 +517,12 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         int coordX = evt.getXOnScreen();
         int coordY = evt.getYOnScreen();
         
-        this.setLocation(coordX-mouseX, coordY-mouseY);
+        jDialog1.setLocation(coordX-mouseX, coordY-mouseY);
     }//GEN-LAST:event_jDialog1MouseDragged
 
     private void jDialog1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDialog1MousePressed
         mouseX = evt.getX();
-         mouseY = evt.getY();
+        mouseY = evt.getY();
     }//GEN-LAST:event_jDialog1MousePressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -545,7 +546,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                     pend.setText(String.valueOf(totalprice));
                     jDialog1.pack();
                     jDialog1.setVisible(true);
-                    jDialog1.toFront();
+                    jDialog1.setAlwaysOnTop(true);
                 }else{
                     String rnum = roomno.getText();
                     String avail = "Available";

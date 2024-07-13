@@ -587,6 +587,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="fullname">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="horizontalAlignment" type="int" value="0"/>
               </Properties>
               <Constraints>
