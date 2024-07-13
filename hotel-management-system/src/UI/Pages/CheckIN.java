@@ -384,17 +384,19 @@ public class CheckIN extends javax.swing.JInternalFrame {
          String govn = govnum.getText();
          String avail = "Occupied";
          String Stat = "Checked IN";
-         java.util.Date date1 = checkIN.getDate();
-         java.util.Date date2 = checkOUT.getDate();
+         java.util.Date checkInDate = checkIN.getDate();
+         java.util.Date checkOutDate = checkOUT.getDate();
          
          
-         if(fname.isEmpty() || cnum.isEmpty() || add.isEmpty() || govn.isEmpty() || date1==null || date2==null){
+         if(fname.isEmpty() || cnum.isEmpty() || add.isEmpty() || govn.isEmpty() || checkInDate==null || checkOutDate==null){
             JOptionPane.showMessageDialog( null, "Please Fill All Fields.", "Try Again", JOptionPane.ERROR_MESSAGE); 
             
          }else if(rnum.isEmpty()){
              JOptionPane.showMessageDialog( null, "Select a Room. Click a row from the Table.", "Try Again", JOptionPane.ERROR_MESSAGE);
          }else if(advance.getText().isBlank()){
              JOptionPane.showMessageDialog( null, "Don't leave the Advance Payment Blank.", "Try Again", JOptionPane.WARNING_MESSAGE);
+         }else if(checkInDate.after(checkOutDate)){
+             JOptionPane.showMessageDialog( null, "Invalid check in date!", "Try Again", JOptionPane.ERROR_MESSAGE);
          }
          
          else{
