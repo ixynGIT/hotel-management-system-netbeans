@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 public class main extends javax.swing.JFrame {
     int mouseX;
     int mouseY;
+    Color clicked = new Color(255,200,1);
     Color hover = new Color(255,200,0);
     Color leave = new Color(26,28,30);
     public main() {
@@ -37,11 +38,11 @@ public class main extends javax.swing.JFrame {
         dashboard = new RoundedPanel(20,new Color(26,28,30));
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        btn_Clients = new javax.swing.JPanel();
+        btn_clients = new javax.swing.JPanel();
         btn_user1 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        btn_manage = new javax.swing.JPanel();
         btn_rooms = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
+        btn_users = new javax.swing.JPanel();
         btn_user = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         logout = new javax.swing.JLabel();
@@ -117,17 +118,17 @@ public class main extends javax.swing.JFrame {
         jLabel2.setText("Dashboard");
         dashboard.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(107, 63, -1, -1));
 
-        btn_Clients.setBackground(new java.awt.Color(26, 28, 30));
-        btn_Clients.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btn_Clients.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_clients.setBackground(new java.awt.Color(26, 28, 30));
+        btn_clients.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_clients.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_ClientsMouseClicked(evt);
+                btn_clientsMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_ClientsMouseEntered(evt);
+                btn_clientsMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_ClientsMouseExited(evt);
+                btn_clientsMouseExited(evt);
             }
         });
 
@@ -138,36 +139,36 @@ public class main extends javax.swing.JFrame {
         btn_user1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_user1.setIconTextGap(7);
 
-        javax.swing.GroupLayout btn_ClientsLayout = new javax.swing.GroupLayout(btn_Clients);
-        btn_Clients.setLayout(btn_ClientsLayout);
-        btn_ClientsLayout.setHorizontalGroup(
-            btn_ClientsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btn_ClientsLayout.createSequentialGroup()
+        javax.swing.GroupLayout btn_clientsLayout = new javax.swing.GroupLayout(btn_clients);
+        btn_clients.setLayout(btn_clientsLayout);
+        btn_clientsLayout.setHorizontalGroup(
+            btn_clientsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btn_clientsLayout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(btn_user1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        btn_ClientsLayout.setVerticalGroup(
-            btn_ClientsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btn_ClientsLayout.createSequentialGroup()
+        btn_clientsLayout.setVerticalGroup(
+            btn_clientsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btn_clientsLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(btn_user1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        dashboard.add(btn_Clients, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 179, -1));
+        dashboard.add(btn_clients, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 179, -1));
 
-        jPanel3.setBackground(new java.awt.Color(26, 28, 30));
-        jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_manage.setBackground(new java.awt.Color(26, 28, 30));
+        btn_manage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_manage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel3MouseClicked(evt);
+                btn_manageMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel3MouseEntered(evt);
+                btn_manageMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel3MouseExited(evt);
+                btn_manageMouseExited(evt);
             }
         });
 
@@ -178,36 +179,36 @@ public class main extends javax.swing.JFrame {
         btn_rooms.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_rooms.setIconTextGap(6);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout btn_manageLayout = new javax.swing.GroupLayout(btn_manage);
+        btn_manage.setLayout(btn_manageLayout);
+        btn_manageLayout.setHorizontalGroup(
+            btn_manageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_manageLayout.createSequentialGroup()
                 .addContainerGap(36, Short.MAX_VALUE)
                 .addComponent(btn_rooms)
                 .addGap(28, 28, 28))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        btn_manageLayout.setVerticalGroup(
+            btn_manageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btn_manageLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(btn_rooms)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        dashboard.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 179, -1));
+        dashboard.add(btn_manage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 179, -1));
 
-        jPanel4.setBackground(new java.awt.Color(26, 28, 30));
-        jPanel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_users.setBackground(new java.awt.Color(26, 28, 30));
+        btn_users.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_users.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel4MouseClicked(evt);
+                btn_usersMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel4MouseEntered(evt);
+                btn_usersMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel4MouseExited(evt);
+                btn_usersMouseExited(evt);
             }
         });
 
@@ -218,24 +219,24 @@ public class main extends javax.swing.JFrame {
         btn_user.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_user.setIconTextGap(7);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout btn_usersLayout = new javax.swing.GroupLayout(btn_users);
+        btn_users.setLayout(btn_usersLayout);
+        btn_usersLayout.setHorizontalGroup(
+            btn_usersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btn_usersLayout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(btn_user)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        btn_usersLayout.setVerticalGroup(
+            btn_usersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btn_usersLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(btn_user, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        dashboard.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 179, -1));
+        dashboard.add(btn_users, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 179, -1));
 
         jPanel1.setBackground(new java.awt.Color(26, 28, 30));
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -277,8 +278,17 @@ public class main extends javax.swing.JFrame {
 
         dashboard.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 480, -1, -1));
 
-        btn_checkIN.setBackground(new java.awt.Color(26, 28, 30));
+        btn_checkIN.setBackground(new java.awt.Color(255, 200, 1));
         btn_checkIN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_checkIN.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                btn_checkINAncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         btn_checkIN.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_checkINMouseClicked(evt);
@@ -409,36 +419,48 @@ public class main extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jLabel10MouseClicked
 
-    private void btn_ClientsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ClientsMouseEntered
-        btn_Clients.setBackground(hover);
-    }//GEN-LAST:event_btn_ClientsMouseEntered
+    private void btn_clientsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_clientsMouseEntered
+        if(btn_clients.getBackground() != clicked)
+            btn_clients.setBackground(hover);
+    }//GEN-LAST:event_btn_clientsMouseEntered
 
-    private void btn_ClientsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ClientsMouseExited
-        btn_Clients.setBackground(leave);
-    }//GEN-LAST:event_btn_ClientsMouseExited
+    private void btn_clientsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_clientsMouseExited
+        if (btn_clients.getBackground() != clicked)
+            btn_clients.setBackground(leave);
+    }//GEN-LAST:event_btn_clientsMouseExited
 
-    private void jPanel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseEntered
-        jPanel3.setBackground(hover);
-    }//GEN-LAST:event_jPanel3MouseEntered
+    private void btn_manageMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_manageMouseEntered
+        if (btn_manage.getBackground() != clicked)
+            btn_manage.setBackground(leave);
+    }//GEN-LAST:event_btn_manageMouseEntered
 
-    private void jPanel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseExited
-        jPanel3.setBackground(leave);
-    }//GEN-LAST:event_jPanel3MouseExited
+    private void btn_manageMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_manageMouseExited
+        if (btn_manage.getBackground() != clicked)
+            btn_manage.setBackground(leave);
+    }//GEN-LAST:event_btn_manageMouseExited
 
-    private void jPanel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseEntered
-        jPanel4.setBackground(hover);
-    }//GEN-LAST:event_jPanel4MouseEntered
+    private void btn_usersMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_usersMouseEntered
+        if (btn_users.getBackground() != clicked)
+            btn_users.setBackground(hover);
+    }//GEN-LAST:event_btn_usersMouseEntered
 
-    private void jPanel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseExited
-        jPanel4.setBackground(leave);
-    }//GEN-LAST:event_jPanel4MouseExited
+    private void btn_usersMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_usersMouseExited
+        if (btn_users.getBackground() != clicked)    
+            btn_users.setBackground(leave);
+    }//GEN-LAST:event_btn_usersMouseExited
 
-    private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
+    private void btn_usersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_usersMouseClicked
        Users usr = new Users();
        intPages.removeAll();
        intPages.add(usr).setVisible(true);
+       if(usr.isVisible())
+                btn_checkIN.setBackground(leave);
+                btn_checkOUT.setBackground(leave);
+                btn_clients.setBackground(leave);
+                btn_manage.setBackground(leave);
+                btn_users.setBackground(clicked);
        
-    }//GEN-LAST:event_jPanel4MouseClicked
+    }//GEN-LAST:event_btn_usersMouseClicked
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         int coordX = evt.getXOnScreen();
@@ -452,16 +474,22 @@ public class main extends javax.swing.JFrame {
          mouseY = evt.getY();
     }//GEN-LAST:event_formMousePressed
 
-    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+    private void btn_manageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_manageMouseClicked
         intPages.removeAll();
         try {
             ManageRooms mr = new ManageRooms();
             intPages.add(mr).setVisible(true);
+            if(mr.isVisible())
+                btn_checkIN.setBackground(leave);
+                btn_checkOUT.setBackground(leave);
+                btn_clients.setBackground(leave);
+                btn_manage.setBackground(clicked);
+                btn_users.setBackground(leave);
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-    }//GEN-LAST:event_jPanel3MouseClicked
+    }//GEN-LAST:event_btn_manageMouseClicked
 
     private void jPanel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseEntered
         jPanel1.setBackground(hover);
@@ -472,43 +500,69 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MouseExited
 
     private void btn_checkINMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkINMouseEntered
-       btn_checkIN.setBackground(hover);
+       if (btn_checkIN.getBackground() != clicked) { 
+        btn_checkIN.setBackground(hover);
+        }
     }//GEN-LAST:event_btn_checkINMouseEntered
 
     private void btn_checkINMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkINMouseExited
+        if (btn_checkIN.getBackground() != clicked) { 
         btn_checkIN.setBackground(leave);
+        }
     }//GEN-LAST:event_btn_checkINMouseExited
 
     private void btn_checkOUTMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkOUTMouseEntered
-         btn_checkOUT.setBackground(hover);
+        if (btn_checkOUT.getBackground() != clicked) {
+            btn_checkOUT.setBackground(hover);  
+        }  
     }//GEN-LAST:event_btn_checkOUTMouseEntered
 
     private void btn_checkOUTMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkOUTMouseExited
-          btn_checkOUT.setBackground(leave);
+        if(btn_checkOUT.getBackground() != clicked){
+            btn_checkOUT.setBackground(leave);
+        }
     }//GEN-LAST:event_btn_checkOUTMouseExited
 
     private void btn_checkINMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkINMouseClicked
-         
+      
         try {      
             CheckIN in = new CheckIN();
             intPages.add(in).setVisible(true);
+            if(in.isVisible())
+                btn_checkIN.setBackground(clicked);
+                btn_checkOUT.setBackground(leave);
+                btn_clients.setBackground(leave);
+                btn_manage.setBackground(leave);
+                btn_users.setBackground(leave);
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_checkINMouseClicked
 
-    private void btn_ClientsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ClientsMouseClicked
-        
+    private void btn_clientsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_clientsMouseClicked
+        intPages.removeAll();
         Clients cn = new Clients();
         intPages.add(cn).setVisible(true);
-        
+        if(cn.isVisible())
+            btn_checkIN.setBackground(leave);
+            btn_checkOUT.setBackground(leave);
+            btn_clients.setBackground(clicked);
+            btn_manage.setBackground(leave);
+            btn_users.setBackground(leave);
          
-    }//GEN-LAST:event_btn_ClientsMouseClicked
+    }//GEN-LAST:event_btn_clientsMouseClicked
 
     private void btn_checkOUTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkOUTMouseClicked
         intPages.removeAll();
-        CheckOUT in = new CheckOUT();
-        intPages.add(in).setVisible(true);
+        CheckOUT out = new CheckOUT();
+        intPages.add(out).setVisible(true);
+        if(out.isVisible())
+            btn_checkIN.setBackground(leave);
+            btn_checkOUT.setBackground(clicked);
+            btn_clients.setBackground(leave);
+            btn_manage.setBackground(leave);
+            btn_users.setBackground(leave);
+            
     }//GEN-LAST:event_btn_checkOUTMouseClicked
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
@@ -521,11 +575,17 @@ public class main extends javax.swing.JFrame {
         try {
             CheckIN ovr = new CheckIN();
             intPages.add(ovr).setVisible(true);
+            if(ovr.isVisible())
+                btn_checkIN.setBackground(clicked);
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_formWindowOpened
+
+    private void btn_checkINAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_btn_checkINAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_checkINAncestorAdded
 
     /**
      * @param args the command line arguments
@@ -563,14 +623,16 @@ public class main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel btn_Clients;
     private javax.swing.JPanel btn_checkIN;
     private javax.swing.JPanel btn_checkOUT;
+    private javax.swing.JPanel btn_clients;
+    private javax.swing.JPanel btn_manage;
     private javax.swing.JLabel btn_rooms;
     private javax.swing.JLabel btn_user;
     private javax.swing.JLabel btn_user1;
     private javax.swing.JLabel btn_user7;
     private javax.swing.JLabel btn_user8;
+    private javax.swing.JPanel btn_users;
     private javax.swing.JPanel dashboard;
     public javax.swing.JDesktopPane intPages;
     private javax.swing.JLabel jLabel1;
@@ -583,8 +645,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel logout;
     // End of variables declaration//GEN-END:variables
 }
