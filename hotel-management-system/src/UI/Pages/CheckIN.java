@@ -6,11 +6,22 @@ package UI.Pages;
 
 
 import UI.LoginPage.dbConnector;
+import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +30,7 @@ import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+
 
 /**
  *
@@ -30,13 +42,17 @@ public class CheckIN extends javax.swing.JInternalFrame {
     Statement st;
     ResultSet rs;
     Connection con;
-    
+    final List<Object[]> originalData = new ArrayList<>();
     dbConnector dbc = new dbConnector();
-    
+    JPanel discountPanel = new JPanel();
+    JTextField discountField = new JTextField(10);
+
+
     public CheckIN() throws SQLException {
         initComponents();
         
         displayData();
+        storeOriginalData();
         ComboBoxUpdate();
         PriceUpdate();
         
@@ -44,27 +60,85 @@ public class CheckIN extends javax.swing.JInternalFrame {
         this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
         BasicInternalFrameUI bi = (BasicInternalFrameUI)this.getUI();
         bi.setNorthPane(null);
+        
+         discountField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+        
+                char c = e.getKeyChar();
+                String discountInput = discountField.getText();
+                if (!Character.isDigit(c) || discountInput.length() == 3) {
+                    e.consume();
+                }
+            }
+        });
+        discountPanel.add(new JLabel("Enter Discount: "));
+        discountPanel.add(discountField);
     }
+    
+    /* 
+    public void ResizeImage() {
+    // Load the image from the provided path
+    ImageIcon icon = new ImageIcon("src/images/refresh(1).png");
+    Image image = icon.getImage();
+
+    // Scale the image to the button's size
+    Image scaledImage = image.getScaledInstance(jButton1.getWidth(), jButton1.getHeight(), Image.SCALE_SMOOTH);
+    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+    
+    jButton1.setIcon(scaledIcon);
+        
+    }
+    */
+
+    private void storeOriginalData() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object[] rowData = new Object[model.getColumnCount()];
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                rowData[j] = model.getValueAt(i, j);
+            }
+            originalData.add(rowData);
+        }
+    }
+
     
     private void ComboBoxUpdate() throws SQLException{
     ctype.removeAllItems();
     rs = dbc.getData("select * from types");
+    
+    ctype.addItem("All");   
     while(rs.next()){
         ctype.addItem(rs.getString("type"));    
     }   
 }
     private void PriceUpdate() throws SQLException{
     String item = (String) ctype.getSelectedItem();
-    rs = dbc.getData("select * from types where type='"+item+"'");
-    while(rs.next()){
-            String iprice = rs.getString("type_price");
-            rprice1.setText(iprice);
+    if(!"All".equalsIgnoreCase(item)){
+        rs = dbc.getData("select * from types where type='"+item+"'");
+        while(rs.next()){
+                String iprice = rs.getString("type_price");
+                rprice1.setText(iprice);
+        }
     }
 }
     private void displayData(){
         String avail = "Available";
         try{
             rs = dbc.getData("SELECT* FROM room where status='"+avail+"'");
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            jTable1.removeColumn(jTable1.getColumnModel().getColumn(4));
+        }catch(SQLException ex){
+            System.out.println("Errors: "+ex.getMessage());
+        }
+    }
+    
+    private void displayData(String roomtype){
+        String avail = "Available";
+        try{
+            rs = dbc.getData("SELECT* FROM room where status='"+avail+"' and roomtype='"+roomtype+"'");
             jTable1.setModel(DbUtils.resultSetToTableModel(rs));
             jTable1.removeColumn(jTable1.getColumnModel().getColumn(4));
         }catch(SQLException ex){
@@ -81,6 +155,7 @@ public class CheckIN extends javax.swing.JInternalFrame {
        }
        return days;
    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -102,11 +177,12 @@ public class CheckIN extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         govtype = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
-        rtotal = new javax.swing.JTextField();
         fullname = new javax.swing.JTextField();
         Ccnum = new javax.swing.JTextField();
         rtprice = new javax.swing.JTextField();
         govnum = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        rtotal = new javax.swing.JTextField();
         roomnum = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -119,12 +195,21 @@ public class CheckIN extends javax.swing.JInternalFrame {
         ctype = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
         advance = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         rprice1 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         noOfdays = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        discountB = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        advanceB = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -181,28 +266,31 @@ public class CheckIN extends javax.swing.JInternalFrame {
         jPanel1.add(govtype, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 250, 20));
 
         jLabel18.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
-        jLabel18.setText("Total Price:");
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 450, -1, -1));
-
-        rtotal.setBackground(new java.awt.Color(242, 242, 242));
-        rtotal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        rtotal.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        rtotal.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel1.add(rtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, 100, 20));
-        jPanel1.add(fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 250, 23));
+        jLabel18.setText("BREAKDOWN:");
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, -1, -1));
+        jPanel1.add(fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 250, -1));
 
         Ccnum.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 CcnumKeyTyped(evt);
             }
         });
-        jPanel1.add(Ccnum, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 250, 23));
+        jPanel1.add(Ccnum, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 250, -1));
 
         rtprice.setEditable(false);
-        rtprice.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        rtprice.setBackground(new java.awt.Color(255, 255, 255));
+        rtprice.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         rtprice.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel1.add(rtprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, 60, 23));
-        jPanel1.add(govnum, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, 250, 23));
+        jPanel1.add(rtprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 445, 70, -1));
+        jPanel1.add(govnum, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, 250, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, 150, 10));
+
+        rtotal.setEditable(false);
+        rtotal.setBackground(new java.awt.Color(255, 255, 255));
+        rtotal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        rtotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        rtotal.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel1.add(rtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 513, 100, 20));
 
         roomnum.setEditable(false);
         roomnum.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -243,7 +331,7 @@ public class CheckIN extends javax.swing.JInternalFrame {
         jLabel19.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
         jLabel19.setText("Address:");
         jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, -1, -1));
-        jPanel1.add(address, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, 250, 23));
+        jPanel1.add(address, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, 250, -1));
 
         ctype.setFont(new java.awt.Font("Microsoft YaHei", 0, 12)); // NOI18N
         ctype.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -273,37 +361,90 @@ public class CheckIN extends javax.swing.JInternalFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField1FocusGained(evt);
             }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
         });
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField1KeyReleased(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 17, 160, -1));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 17, 130, -1));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        jLabel10.setText("total");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 445, -1, -1));
 
         advance.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 advanceKeyTyped(evt);
             }
         });
-        jPanel1.add(advance, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 390, 250, -1));
+        jPanel1.add(advance, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 120, -1));
 
         jLabel6.setText("Advance Payment:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 383, -1, -1));
 
-        jLabel10.setFont(new java.awt.Font("Microsoft YaHei", 0, 12)); // NOI18N
-        jLabel10.setText("Total:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(265, 244, -1, -1));
+        rprice1.setEditable(false);
+        rprice1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.add(rprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 240, 110, 23));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 2, 10)); // NOI18N
         jLabel13.setText("/Days");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 470, -1, -1));
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 515, -1, -1));
 
         noOfdays.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         noOfdays.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         noOfdays.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel1.add(noOfdays, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 470, 30, -1));
+        jPanel1.add(noOfdays, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 513, 30, -1));
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setText("Discount");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, -1, 23));
+
+        jLabel14.setText("Discount");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 211, -1, -1));
+
+        jTextField2.setEditable(false);
+        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextField2.setText("No");
+        jTextField2.setBorder(null);
+        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 211, 30, -1));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        jLabel16.setText("advance payment");
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 466, -1, -1));
+
+        discountB.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        discountB.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jPanel1.add(discountB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 493, 70, 10));
+
+        jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel20.setText("-");
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, -1, -1));
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        jLabel21.setText("discount");
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 488, -1, -1));
+
+        advanceB.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jPanel1.add(advanceB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 470, 70, 10));
+
+        jButton2.setText("Generate");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 418, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -313,64 +454,65 @@ public class CheckIN extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        TableRowSorter<DefaultTableModel> model1 = new TableRowSorter<>(model);
-        jTable1.setRowSorter(model1);
-        model1.setRowFilter(RowFilter.regexFilter("(?i)" + jTextField1.getText()));;
-    }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
         jTextField1.setText("");
     }//GEN-LAST:event_jTextField1FocusGained
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        TableRowSorter<DefaultTableModel> model1 = new TableRowSorter<>(model);
-        jTable1.setRowSorter(model1);
-        model1.setRowFilter(null);
         
        roomnum.setText("");
        fullname.setText("");
        Ccnum.setText("");
+       ctype.setSelectedItem(0);
        checkIN.setDate(null);
        checkOUT.setDate(null);
        address.setText("");
        rprice1.setText("");
-        advance.setText("");
-        govnum.setText("");
-        
-        displayData();
+       advance.setText("");
+       govnum.setText("");
+       rtprice.setText("");
+       rtotal.setText("");
+       advanceB.setText("");
+       discountB.setText("");
+       discountField.setText("");
+
+       displayData();
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void ctypePopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_ctypePopupMenuWillBecomeVisible
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        TableRowSorter<DefaultTableModel> model1 = new TableRowSorter<>(model);
-        jTable1.setRowSorter(model1);
-        model1.setRowFilter(RowFilter.regexFilter(ctype.getItemAt(ctype.getSelectedIndex())));
-        try {
-            PriceUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(CheckIN.class.getName()).log(Level.SEVERE, null, ex);
+        String type = ctype.getItemAt(ctype.getSelectedIndex());
+
+        if (type.equalsIgnoreCase("All")) {
+            displayData();
+        } else {
+            try {
+                PriceUpdate();
+                displayData(type);
+            } catch (SQLException ex) {
+                Logger.getLogger(CheckIN.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }//GEN-LAST:event_ctypePopupMenuWillBecomeVisible
 
     private void ctypePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_ctypePopupMenuWillBecomeInvisible
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        TableRowSorter<DefaultTableModel> model1 = new TableRowSorter<>(model);
-        jTable1.setRowSorter(model1);
-        model1.setRowFilter(RowFilter.regexFilter(ctype.getItemAt(ctype.getSelectedIndex())));
-        try {
-            PriceUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(CheckIN.class.getName()).log(Level.SEVERE, null, ex);
+        String type = ctype.getItemAt(ctype.getSelectedIndex());
+
+        if(type.equalsIgnoreCase("All")){
+            displayData();
+        }else{
+            try {
+                PriceUpdate();
+                displayData(type);
+            } catch (SQLException ex) {
+                Logger.getLogger(CheckIN.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_ctypePopupMenuWillBecomeInvisible
 
@@ -382,58 +524,79 @@ public class CheckIN extends javax.swing.JInternalFrame {
          String add = address.getText();
          String govt = govtype.getItemAt(govtype.getSelectedIndex());
          String govn = govnum.getText();
-         String avail = "Occupied";
+         String occupied = "Occupied";
          String Stat = "Checked IN";
          java.util.Date checkInDate = checkIN.getDate();
          java.util.Date checkOutDate = checkOUT.getDate();
          
+         String advanceField = advance.getText().trim();
+         String discountInput = discountField.getText().trim();
+         String advanceBreakdown = advanceB.getText().trim();
+         String discountBreakdown = discountB.getText().trim();
+         String finalTotalCalculation = rtotal.getText().trim();
+         
+            if(advanceField.isEmpty()){
+                advanceB.setText("0");
+            }else{
+                advanceB.setText(advanceField);
+            }
+            if(discountInput.isEmpty()){
+                discountField.setText("0");
+                discountB.setText("0");
+            }else{
+                discountB.setText(discountInput);
+            }
          
          if(fname.isEmpty() || cnum.isEmpty() || add.isEmpty() || govn.isEmpty() || checkInDate==null || checkOutDate==null){
-            JOptionPane.showMessageDialog( null, "Please Fill All Fields.", "Try Again", JOptionPane.ERROR_MESSAGE); 
-            
+            JOptionPane.showMessageDialog( null, "Please Fill All Fields.", "Try Again", JOptionPane.ERROR_MESSAGE);       
          }else if(rnum.isEmpty()){
              JOptionPane.showMessageDialog( null, "Select a Room. Click a row from the Table.", "Try Again", JOptionPane.ERROR_MESSAGE);
-         }else if(advance.getText().isBlank()){
-             JOptionPane.showMessageDialog( null, "Don't leave the Advance Payment Blank.", "Try Again", JOptionPane.WARNING_MESSAGE);
+         }else if(advanceBreakdown.isEmpty() || discountBreakdown.isEmpty() || finalTotalCalculation.isEmpty()){
+             JOptionPane.showMessageDialog( null, "Please click the generate button before proceeding.", "Try Again", JOptionPane.ERROR_MESSAGE);
          }else if(checkInDate.after(checkOutDate)){
              JOptionPane.showMessageDialog( null, "Invalid check in date!", "Try Again", JOptionPane.ERROR_MESSAGE);
-         }
-         
-         else{
-             
+         }else{           
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String datein = sdf.format(checkIN.getDate());
             String dateout = sdf.format(checkOUT.getDate());
-   
-            int amtpaid = Integer.parseInt(advance.getText());
+                       
+            int roomPrice = Integer.parseInt(rprice1.getText());
+            int advancePayment = Integer.parseInt(advanceBreakdown);
+            int totalRoomPrice = roomPrice * getDays();
+            int pendingAmount = totalRoomPrice - advancePayment;      
             
-            int rp = Integer.parseInt(rprice1.getText());
-            int rptotal = rp * getDays();
-            rtprice.setText(String.valueOf(rptotal));
-             
+            double inputDiscount = Double.parseDouble(discountBreakdown);
+            double totalPrice = Double.parseDouble(String.valueOf(pendingAmount));
+            double discountValue = totalPrice * (inputDiscount / 100);
+            
+            int finalDiscountValue = (int) Math.ceil(discountValue);
+            int finalPrice = pendingAmount - finalDiscountValue;
+
+            discountB.setText(String.valueOf(finalDiscountValue));
+            rtprice.setText(String.valueOf(totalRoomPrice));
+            rtotal.setText(String.valueOf(finalPrice));
             noOfdays.setText(String.valueOf(getDays()));
-            
-            int totalp = rptotal - amtpaid;
-            rtotal.setText(String.valueOf(totalp));
+                 
+            int discount = Integer.parseInt(discountField.getText());
              
             int result = JOptionPane.showConfirmDialog(null,"Sure? Allocate room?", "CONFIRMATION",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE);
              switch (result) {
                  case JOptionPane.YES_OPTION -> {
-                     int sulod = dbc.insertData("INSERT INTO client(roomno, Fullname, Cnumber, Address, GovType, GovID, CheckIN, CheckOUT, Rprice, Rtotal, Paid, TOTAL, Stat)"
-                    + "VALUES('"+rnum+"', '"+fname+"', '"+cnum+"', '"+add+"', '"+govt+"', '"+govn+"', '"+datein+"', '"+dateout+"', '"+rp+"', '"+rptotal+"', '"+amtpaid+"', '"+totalp+"', '"+Stat+"')");
+                     int sulod = dbc.insertData("INSERT INTO client(roomno, Fullname, Cnumber, Address, GovType, GovID, CheckIN, CheckOUT, Rprice, Paid, Discount, TOTAL, Stat)"
+                    + "VALUES('"+rnum+"', '"+fname+"', '"+cnum+"', '"+add+"', '"+govt+"', '"+govn+"', '"+datein+"', '"+dateout+"', '"+roomPrice+"', '"+advancePayment+"', '"+discount+"', '"+finalPrice+"', '"+Stat+"')");
                     
                      if(sulod == 1){
                      JOptionPane.showMessageDialog( null, "Allocated Successfully!");
-                     dbc.updateData("UPDATE room set status='"+avail+"' WHERE roomnumber ='"+rnum+"'");
+                     dbc.updateData("UPDATE room set status='"+occupied+"' WHERE roomnumber ='"+rnum+"'");
                      }
-             
+                     
+                     displayData();
                  }
                  case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
                  case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
-                 default -> {
-                 }
+                 default -> {}
              }
          }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -442,6 +605,16 @@ public class CheckIN extends javax.swing.JInternalFrame {
        int rowindex = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
         roomnum.setText(""+model.getValueAt(rowindex, 0));
+        
+//        if (rowindex != -1) {
+//            // Get the value from the selected row's second column (index 1)
+//            String value = (String) model.getValueAt(rowindex, 1);
+//            // Set the selected item in the combo box
+//            ctype.setSelectedItem(value);
+//        }
+        rprice1.setText(""+model.getValueAt(rowindex, 2));
+
+        
         
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -461,27 +634,160 @@ public class CheckIN extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_advanceKeyTyped
 
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    String filterText = jTextField1.getText().toLowerCase();
+
+    // Remove all rows from the model
+    model.setRowCount(0);
+
+    // Add the original rows back to the model
+    for (Object[] row : originalData) {
+            boolean matches = false;
+            for (Object cell : row) {
+                if (cell.toString().toLowerCase().contains(filterText)) {
+                    matches = true;
+                    break;
+                }
+            }
+            if (matches) {
+                model.addRow(row);
+            }
+    }
+
+    // Apply the filter
+//    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+//    jTable1.setRowSorter(sorter);
+//    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText));
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int result = JOptionPane.showConfirmDialog(null, discountPanel, "Discount Percentage", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        String input = discountField.getText().trim();
+        
+        if (result == JOptionPane.OK_OPTION && !input.isEmpty()) {
+                int discountInt = Integer.parseInt(input);
+                
+                if(discountInt > 100){
+                    JOptionPane.showMessageDialog(null, "Discount should not exceed 100.", "Try Again", JOptionPane.ERROR_MESSAGE);
+                    discountField.setText("");
+                }else{
+                    System.out.println("Discount input: " + input);
+
+                    jTextField2.setText(input + "%");
+                    if (!rtprice.getText().trim().isEmpty() && !advanceB.getText().trim().isEmpty()) {
+                        String advancePaymentTxt = advance.getText().trim();
+                        String discountBreakdownTxt = discountField.getText().trim();
+                        int roomPrice = Integer.parseInt(rprice1.getText());
+                        int advancePayment = Integer.parseInt(advancePaymentTxt);
+                        int totalRoomPrice = roomPrice * getDays();
+                        int pendingAmount = totalRoomPrice - advancePayment;
+
+                        double inputDiscount = Double.parseDouble(discountBreakdownTxt);
+                        double totalPrice = Double.parseDouble(String.valueOf(pendingAmount));
+                        double discountValue = totalPrice * (inputDiscount / 100);
+                        
+                        int finalDiscountValue = (int) Math.ceil(discountValue);
+                        int finalPrice = pendingAmount - finalDiscountValue;
+
+                        discountB.setText(String.valueOf(finalDiscountValue));
+                        rtotal.setText(String.valueOf(finalPrice));
+                    }
+                }
+                
+                    
+                
+       }else{ 
+            System.out.println("Cancelled or empty"); 
+            discountField.setText("0");
+            discountB.setText("0");
+            jTextField2.setText("No");
+        }
+        
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        java.util.Date checkInDate = checkIN.getDate();
+        java.util.Date checkOutDate = checkOUT.getDate();     
+        String advanceField = advance.getText().trim();
+        String discountInput = discountField.getText().trim();
+        
+        
+        if(checkInDate!=null && checkOutDate!=null && !rprice1.getText().trim().isEmpty() && checkOutDate.after(checkInDate)){
+            int rp = Integer.parseInt(rprice1.getText());
+            int totalRoomPrice = rp * getDays();
+            rtprice.setText(String.valueOf(totalRoomPrice));
+            noOfdays.setText(String.valueOf(getDays()));
+         }
+            if(advanceField.isEmpty()){
+                advanceB.setText("0");
+            }else{
+                advanceB.setText(advanceField);
+            }
+            if(discountInput.isEmpty()){
+                discountB.setText("0");
+            }else{
+                discountB.setText(discountInput);
+            }
+            
+        if(!rtprice.getText().trim().isEmpty() && !advanceB.getText().trim().isEmpty() && !discountB.getText().trim().isEmpty()){
+            String advancePaymentTxt = advance.getText().trim();
+            if(discountField.getText().trim().isEmpty()){
+                discountField.setText("0");
+            }
+            String discountBreakdownTxt = discountField.getText().trim();
+            int roomPrice = Integer.parseInt(rprice1.getText());
+            int advancePayment = Integer.parseInt(advancePaymentTxt);
+            int totalRoomPrice = roomPrice * getDays();
+            int pendingAmount = totalRoomPrice - advancePayment;      
+            
+            double inputDiscount = Double.parseDouble(discountBreakdownTxt);
+            double totalPrice = Double.parseDouble(String.valueOf(pendingAmount));
+            double discountValue = totalPrice * (inputDiscount / 100);
+            
+            int finalDiscountValue = (int) Math.ceil(discountValue);
+            int finalPrice = pendingAmount - finalDiscountValue;
+            
+            discountB.setText(String.valueOf(finalDiscountValue));
+            rtotal.setText(String.valueOf(finalPrice));
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+        jTextField1.setText("Search");
+    }//GEN-LAST:event_jTextField1FocusLost
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Ccnum;
     private javax.swing.JTextField address;
     private javax.swing.JTextField advance;
+    private javax.swing.JLabel advanceB;
     private com.toedter.calendar.JDateChooser checkIN;
     private com.toedter.calendar.JDateChooser checkOUT;
     public javax.swing.JComboBox<String> ctype;
+    private javax.swing.JLabel discountB;
     private javax.swing.JTextField fullname;
     private javax.swing.JTextField govnum;
     private javax.swing.JComboBox<String> govtype;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -491,8 +797,10 @@ public class CheckIN extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     public javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField noOfdays;
     private javax.swing.JTextField roomnum;
     private javax.swing.JTextField rprice1;

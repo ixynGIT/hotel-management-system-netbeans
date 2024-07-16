@@ -431,7 +431,7 @@ public class main extends javax.swing.JFrame {
 
     private void btn_manageMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_manageMouseEntered
         if (btn_manage.getBackground() != clicked)
-            btn_manage.setBackground(leave);
+            btn_manage.setBackground(hover);
     }//GEN-LAST:event_btn_manageMouseEntered
 
     private void btn_manageMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_manageMouseExited
@@ -556,12 +556,13 @@ public class main extends javax.swing.JFrame {
         intPages.removeAll();
         CheckOUT out = new CheckOUT();
         intPages.add(out).setVisible(true);
-        if(out.isVisible())
+        if(out.isVisible()){
             btn_checkIN.setBackground(leave);
             btn_checkOUT.setBackground(clicked);
             btn_clients.setBackground(leave);
             btn_manage.setBackground(leave);
             btn_users.setBackground(leave);
+        }
             
     }//GEN-LAST:event_btn_checkOUTMouseClicked
 

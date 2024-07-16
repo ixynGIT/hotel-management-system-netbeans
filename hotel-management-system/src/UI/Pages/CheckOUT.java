@@ -6,13 +6,16 @@ package UI.Pages;
 
 
 import UI.LoginPage.dbConnector;
+import java.awt.Color;
 import java.awt.HeadlessException;
+import static java.lang.Math.abs;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -32,7 +35,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     
     public CheckOUT() {
         initComponents();
-        
+
         displayData();
         
         this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
@@ -94,6 +97,9 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         tprice1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        change = new javax.swing.JTextField();
+        clientid1 = new javax.swing.JTextField();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -104,12 +110,12 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        roomno = new javax.swing.JTextField();
+        clientid = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         checkOUT = new javax.swing.JTextField();
         govno = new javax.swing.JTextField();
         checkIN = new javax.swing.JTextField();
-        tprice = new javax.swing.JTextField();
+        pendingPrice = new javax.swing.JTextField();
         rprice = new javax.swing.JTextField();
         paid = new javax.swing.JTextField();
         fullname = new javax.swing.JTextField();
@@ -121,7 +127,10 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         jLabel24 = new javax.swing.JLabel();
         rptotal = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        roomno = new javax.swing.JTextField();
 
+        jDialog1.setResizable(false);
         jDialog1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jDialog1MouseDragged(evt);
@@ -134,6 +143,15 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+                jPanel2AncestorRemoved(evt);
+            }
+        });
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel13.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
@@ -145,61 +163,67 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                 jLabel13MouseClicked(evt);
             }
         });
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, 40, 20));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 270, 40, 20));
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel25.setText("Room Price:");
-        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
         rprice1.setEditable(false);
         rprice1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rprice1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(rprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 140, -1));
+        jPanel2.add(rprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 140, -1));
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel26.setText("Add Payment:");
-        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
 
         rtotal2.setEditable(false);
         rtotal2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rtotal2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(rtotal2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 140, -1));
+        jPanel2.add(rtotal2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 140, -1));
 
         fullname1.setEditable(false);
         fullname1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         fullname1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         fullname1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(fullname1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 240, -1));
+        jPanel2.add(fullname1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 240, -1));
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel27.setText("Full Name:");
-        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 60, -1));
+        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 60, -1));
 
         roomno1.setEditable(false);
         roomno1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         roomno1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         roomno1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(roomno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 130, -1));
+        jPanel2.add(roomno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 130, -1));
 
         jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel28.setText("Room Number:");
-        jPanel2.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 100, -1));
+        jPanel2.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 100, -1));
 
         pend.setEditable(false);
         pend.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         pend.setForeground(new java.awt.Color(88, 168, 105));
         pend.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         pend.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(pend, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 100, 20));
+        jPanel2.add(pend, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 100, 20));
 
         jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel29.setText("Pending Payment:");
-        jPanel2.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, 100, -1));
+        jPanel2.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 100, -1));
 
         jLabel30.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel30.setText("Amount Paid:");
-        jPanel2.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
-        jPanel2.add(paid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 140, -1));
+        jPanel2.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+
+        paid1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                paid1KeyTyped(evt);
+            }
+        });
+        jPanel2.add(paid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 140, -1));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus.png"))); // NOI18N
@@ -209,7 +233,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                 jLabel2MouseClicked(evt);
             }
         });
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 204, 40, 30));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 175, 40, 30));
 
         paid2.setEditable(false);
         paid2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -219,19 +243,31 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                 paid2ActionPerformed(evt);
             }
         });
-        jPanel2.add(paid2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 140, -1));
+        jPanel2.add(paid2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 140, -1));
 
         tprice1.setEditable(false);
         tprice1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(tprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, 90, -1));
+        jPanel2.add(tprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 90, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("/");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, -1, -1));
 
         jLabel31.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel31.setText("Room Total:");
-        jPanel2.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+        jPanel2.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setText("Change :");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, -1, -1));
+
+        change.setBorder(null);
+        jPanel2.add(change, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, -1, -1));
+
+        clientid1.setEditable(false);
+        clientid1.setForeground(new java.awt.Color(255, 255, 255));
+        clientid1.setBorder(null);
+        jPanel2.add(clientid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -273,14 +309,14 @@ public class CheckOUT extends javax.swing.JInternalFrame {
 
         jLabel14.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
         jLabel14.setText("Room Number:");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, -1, -1));
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
         jLabel15.setText("Amount Paid:");
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 170, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
-        jLabel17.setText("Room Price:");
+        jLabel17.setText("Total Room Price:");
         jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 70, -1, -1));
 
         jLabel18.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
@@ -291,10 +327,10 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         jLabel19.setText("Gov ID:");
         jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
 
-        roomno.setEditable(false);
-        roomno.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        roomno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel1.add(roomno, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, 90, -1));
+        clientid.setEditable(false);
+        clientid.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        clientid.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel1.add(clientid, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 90, -1));
 
         jLabel20.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
         jLabel20.setText("Check IN:");
@@ -309,8 +345,13 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         checkIN.setEditable(false);
         jPanel1.add(checkIN, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 160, -1));
 
-        tprice.setEditable(false);
-        jPanel1.add(tprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, 140, -1));
+        pendingPrice.setEditable(false);
+        pendingPrice.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                pendingPricePropertyChange(evt);
+            }
+        });
+        jPanel1.add(pendingPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, 140, -1));
 
         rprice.setEditable(false);
         jPanel1.add(rprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 90, 140, -1));
@@ -361,7 +402,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         jPanel1.add(btn_refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 223, -1, -1));
 
         jLabel24.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
-        jLabel24.setText("Room Total:");
+        jLabel24.setText("Total Price (Discounted):");
         jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 120, -1, -1));
 
         rptotal.setEditable(false);
@@ -378,6 +419,14 @@ public class CheckOUT extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 100, 40));
+
+        jLabel4.setText("Client ID:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
+
+        roomno.setEditable(false);
+        roomno.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        roomno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel1.add(roomno, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, 90, -1));
 
         jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -419,16 +468,32 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int rowindex = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
+        clientid.setText(""+model.getValueAt(rowindex, 13));
         roomno.setText(""+model.getValueAt(rowindex, 0));
         fullname.setText(""+model.getValueAt(rowindex, 1));
         govtype.setSelectedItem(model.getValueAt(rowindex, 4));
         govno.setText(""+model.getValueAt(rowindex, 5));
         checkIN.setText("" + model.getValueAt(rowindex, 6));
         checkOUT.setText("" + model.getValueAt(rowindex, 7));
-        rprice.setText(""+model.getValueAt(rowindex, 8));
-        rptotal.setText(""+model.getValueAt(rowindex, 9));
-        paid.setText(""+model.getValueAt(rowindex, 10));
-        tprice.setText(""+model.getValueAt(rowindex, 11));
+        
+        int roomPrice = Integer.parseInt(""+model.getValueAt(rowindex, 8));
+        int totalDiscountedPrice = Integer.parseInt("" + model.getValueAt(rowindex, 11));
+        int paidAmount = Integer.parseInt("" + model.getValueAt(rowindex, 9));
+
+        rptotal.setText(String.valueOf(totalDiscountedPrice));
+        paid.setText(String.valueOf(paidAmount));
+
+        try {
+            int totalRoomPrice = roomPrice * getDays(); 
+            int pending = totalDiscountedPrice - paidAmount;
+            
+            rprice.setText(String.valueOf(totalRoomPrice));
+            pendingPrice.setText(String.valueOf(pending));
+        } catch (ParseException ex) {
+            Logger.getLogger(CheckOUT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+       
         
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -444,14 +509,10 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        TableRowSorter<DefaultTableModel> model1 = new TableRowSorter<>(model);
-        jTable1.setRowSorter(model1);
-        model1.setRowFilter(null);
+       jTable1.setDefaultEditor(Object.class, null);
        
-        fullname.setText("");
-        
-        
+        clientid.setText("");
+        fullname.setText("");   
         govtype.setSelectedItem(0);
         govno.setText("");
         checkIN.setText("");
@@ -459,7 +520,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         rprice.setText("");
         rptotal.setText("");
         paid.setText("");
-        tprice.setText("");
+        pendingPrice.setText("");
 
 
         
@@ -468,42 +529,95 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_refreshActionPerformed
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        String paidInput = paid1.getText();
+        int amountPaid = Integer.parseInt(paid2.getText());
+        int pending = Integer.parseInt(pend.getText());
         
-        
-        
-        int result = JOptionPane.showConfirmDialog(null,"Sure? Want to Save Changes?", "CONFIRMATION",
-          JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-             switch (result) {
-                 case JOptionPane.YES_OPTION -> {
-                      int total = Integer.parseInt(pend.getText());
-                      if(total>-1000){
-                      paid.setText(String.valueOf(paid2.getText()));
-                      tprice.setText(String.valueOf(total));
-                      }else{
-                           JOptionPane.showMessageDialog( null, "Illegal Amount Paid Input.");
-                      }
-                 }
-                 case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
-                 case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
-                 default -> {
-                 }
-        
-             }
+        if(paidInput.isEmpty() && pending > 0){
+            JOptionPane.showMessageDialog( null, "Please dont leave payment blank.", "Try Again", JOptionPane.ERROR_MESSAGE); 
+        }else{
+            JOptionPane optionPane = new JOptionPane(
+                    "Sure? Want to Save Changes?",
+                    JOptionPane.QUESTION_MESSAGE,
+                    JOptionPane.YES_NO_OPTION);
+            
+            JDialog dialog = optionPane.createDialog("CONFIRMATION");
+            
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+            
+            
+            int result = ((Integer) optionPane.getValue());
+               switch (result) {
+                   case JOptionPane.YES_OPTION -> {
+                      
+                      dbc.updateData("Update client set Paid='"+amountPaid+"', Pending='"+pending+"' where roomno='"+roomno1.getText()+"'");
+                   }
+                   case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
+                   case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
+                   default -> {}
+               }
         
         jDialog1.dispose();
-
+        }
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-                      int pd1 = Integer.parseInt(paid1.getText());
-                      int pd2 = Integer.parseInt(paid2.getText());
-                      int tp = Integer.parseInt(pend.getText());
-                      int totalpd = pd1+pd2;
-                      int totalprice = tp - pd1;
-                      
-                      paid2.setText(String.valueOf(totalpd));
-                      pend.setText(String.valueOf(totalprice));
+                      String amountPaidField = paid1.getText().trim();
+                      int totalPaid = Integer.parseInt(paid2.getText());
+                      int pendingAmount = Integer.parseInt(pend.getText());
+                      int totalCost = Integer.parseInt(tprice1.getText());
+                        
+                    if (amountPaidField.isEmpty()){
+                        JOptionPane optionPane = new JOptionPane(
+                                "Please don't leave the payment field blank.",
+                                JOptionPane.ERROR_MESSAGE);
+
+                        JDialog dialog = optionPane.createDialog("Try Again");
+
+                        dialog.setAlwaysOnTop(true);
+                        dialog.setVisible(true);
+
+                    }else {
+                        JOptionPane optionPane = new JOptionPane(
+                                "Want to add input as payment?",
+                                JOptionPane.QUESTION_MESSAGE,
+                                JOptionPane.YES_NO_OPTION);
+
+                        JDialog dialog = optionPane.createDialog("CONFIRMATION");
+
+                        dialog.setAlwaysOnTop(true);
+                        dialog.setVisible(true);
+
+                        int result = ((Integer) optionPane.getValue());
+                        switch (result) {
+                            case JOptionPane.YES_OPTION -> {
+                                
+                                
+                                int amountPaid = Integer.parseInt(amountPaidField);
+                                int totalpd = totalPaid + amountPaid;
+                                int remainingPending = pendingAmount - amountPaid;
+                                
+                                if(totalpd > totalCost){
+                                    int changeDifference = totalPaid - totalCost;
+                                    change.setText(String.valueOf(changeDifference));
+                                    paid2.setText(String.valueOf(totalpd));
+                                    pend.setText("0");
+                                    paid1.setText("");
+                                }else{
+                                    paid2.setText(String.valueOf(totalpd));
+                                    pend.setText(String.valueOf(remainingPending));
+                                    paid1.setText("");
+                                }
+                            }
+                            case JOptionPane.NO_OPTION ->
+                                System.out.println("You Selected No");
+                            case JOptionPane.CLOSED_OPTION ->
+                                System.out.println("You Closed the prompt");
+                            default -> {
+                            }
+                        }
+                    }
            
             
             
@@ -526,18 +640,47 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jDialog1MousePressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         String fname = fullname.getText();
+        String fname = fullname.getText();
         if(fname.isEmpty()){
             JOptionPane.showMessageDialog(this,"Please Select A Row.");
-        }else if(!fname.isEmpty()){
-            int rptot = Integer.parseInt(rptotal.getText());
-            int tptot = Integer.parseInt(tprice.getText());
+        }else{
             
-            if(tptot>0){
-                    int rp = Integer.parseInt(rprice.getText());
+            int rptot = Integer.parseInt(rptotal.getText());
+            int tptot = Integer.parseInt(pendingPrice.getText());
+            
+            if(tptot==0){
+                int result = JOptionPane.showConfirmDialog(null, "Fully paid. Want to Check out?", "CONFIRMATION",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+                switch (result) {
+                    case JOptionPane.YES_OPTION -> {
+                        String avail = "Available";
+                        String out = "Checked OUT";
+                        int clientID = Integer.parseInt(clientid.getText());
+                        
+                        int pd = Integer.parseInt(paid.getText());
+                        int tp = Integer.parseInt(pendingPrice.getText());
+                        
+                        dbc.updateData("UPDATE room SET status='"+avail+"' where roomnumber='"+roomno.getText()+"' ");
+                        dbc.updateData("UPDATE client SET Paid='"+pd+"', TOTAL='"+tp+"', Stat='"+out+"' WHERE clientid='"+clientID+"' ");
+                        displayData();
+                    }
+                    case JOptionPane.NO_OPTION ->
+                        System.out.println("You Selected No");
+                    case JOptionPane.CLOSED_OPTION ->
+                        System.out.println("You Closed the prompt");
+                    default -> {
+                    }
+                }
+                    
+            }else{
+                int rp = Integer.parseInt(rprice.getText());
                     int pd = Integer.parseInt(paid.getText());
                     int totalprice = rptot - pd;
-   
+                    
+                    clientid1.setVisible(false);
+                    clientid1.setText(clientid.getText());
+                    roomno1.setText(roomno.getText());
                     fullname1.setText(fname);
                     rprice1.setText(String.valueOf(rp));
                     rtotal2.setText(String.valueOf(rptot));
@@ -546,31 +689,53 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                     pend.setText(String.valueOf(totalprice));
                     jDialog1.pack();
                     jDialog1.setVisible(true);
-                    jDialog1.setAlwaysOnTop(true);
-                }else{
-                    String rnum = roomno.getText();
-                    String avail = "Available";
-                    String out = "Checked OUT";
-                    int pd = Integer.parseInt(paid.getText());
-                    int tp = Integer.parseInt(tprice.getText());
-                    dbc.updateData("UPDATE room SET status='"+avail+"' WHERE roomnumber= '"+rnum+"' ");
-                    dbc.updateData("UPDATE client SET Paid='"+pd+"', TOTAL='"+tp+"', Stat='"+out+"' WHERE roomno= '"+rnum+"' ");
-                }
+                    jDialog1.setAlwaysOnTop(true);                   
+           }
        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void paid1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paid1KeyTyped
+        char c = evt.getKeyChar();
+
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_paid1KeyTyped
+
+    private void jPanel2AncestorRemoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel2AncestorRemoved
+        change.setText("");
+        clientid1.setText("");
+        roomno1.setText("");
+        fullname1.setText("");
+        rprice1.setText("");
+        rtotal2.setText("");
+        tprice1.setText("");
+        paid2.setText("");
+        pend.setText("");
+    }//GEN-LAST:event_jPanel2AncestorRemoved
+
+    private void pendingPricePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_pendingPricePropertyChange
+       String pending = pendingPrice.getText().trim();
+        if(pending.equals(0))
+            jButton1.setBackground(new Color(0,153,0));
+    }//GEN-LAST:event_pendingPricePropertyChange
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_refresh;
+    private javax.swing.JTextField change;
     private javax.swing.JTextField checkIN;
     private javax.swing.JTextField checkOUT;
+    private javax.swing.JTextField clientid;
+    private javax.swing.JTextField clientid1;
     private javax.swing.JTextField fullname;
     private javax.swing.JTextField fullname1;
     private javax.swing.JTextField govno;
     private javax.swing.JComboBox<String> govtype;
     private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -590,6 +755,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
@@ -601,13 +767,13 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     private javax.swing.JTextField paid1;
     private javax.swing.JTextField paid2;
     private javax.swing.JTextField pend;
+    private javax.swing.JTextField pendingPrice;
     private javax.swing.JTextField roomno;
     private javax.swing.JTextField roomno1;
     private javax.swing.JTextField rprice;
     private javax.swing.JTextField rprice1;
     private javax.swing.JTextField rptotal;
     private javax.swing.JTextField rtotal2;
-    private javax.swing.JTextField tprice;
     private javax.swing.JTextField tprice1;
     // End of variables declaration//GEN-END:variables
 }

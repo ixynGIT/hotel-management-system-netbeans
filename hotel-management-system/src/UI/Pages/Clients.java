@@ -132,6 +132,8 @@ public class Clients extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel4 = new javax.swing.JLabel();
+        clientid = new javax.swing.JTextField();
 
         jDialog1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -431,6 +433,14 @@ public class Clients extends javax.swing.JInternalFrame {
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 257, 240, -1));
 
+        jLabel4.setText("Client ID:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
+
+        clientid.setEditable(false);
+        clientid.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        clientid.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel1.add(clientid, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 90, -1));
+
         jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
@@ -484,6 +494,7 @@ public class Clients extends javax.swing.JInternalFrame {
         paid.setText(""+model.getValueAt(rowindex, 10));
         tprice.setText(""+model.getValueAt(rowindex, 11));
         status.setText(""+model.getValueAt(rowindex, 12));
+        clientid.setText(""+model.getValueAt(rowindex, 13));
         
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -639,7 +650,7 @@ public class Clients extends javax.swing.JInternalFrame {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/plasabas_db", "root", "");
                         pst = con.prepareStatement("delete from client where roomno=?");
-                        pst.setString(1, roomno.getText());
+                        pst.setString(1, clientid.getText());
                         int rowsDeleted = pst.executeUpdate();
                         if(rowsDeleted > 0){
                         JOptionPane.showMessageDialog(null, "Deleted Successfully!");
@@ -672,6 +683,7 @@ public class Clients extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_refresh;
     private javax.swing.JTextField checkIN;
     private javax.swing.JTextField checkOUT;
+    private javax.swing.JTextField clientid;
     private javax.swing.JTextField cnum;
     private javax.swing.JTextField fullname;
     private javax.swing.JTextField fullname1;
@@ -704,6 +716,7 @@ public class Clients extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;

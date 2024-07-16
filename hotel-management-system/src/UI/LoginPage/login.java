@@ -274,8 +274,10 @@ public class login extends javax.swing.JFrame {
            
            if(rslt.next()){
                dispose();
-               loading load = new loading();
-               load.setVisible(true);
+//               loading load = new loading();
+//               load.setVisible(true);
+                 main mn = new main();
+                 mn.setVisible(true);
            }else{
                JOptionPane.showMessageDialog( null, "Invalid Username or Password", "Warning", JOptionPane.WARNING_MESSAGE);
                username.setText("Username");
