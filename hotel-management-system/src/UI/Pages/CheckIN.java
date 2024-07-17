@@ -537,6 +537,7 @@ public class CheckIN extends javax.swing.JInternalFrame {
          
             if(advanceField.isEmpty()){
                 advanceB.setText("0");
+                advance.setText("0");
             }else{
                 advanceB.setText(advanceField);
             }
@@ -549,10 +550,12 @@ public class CheckIN extends javax.swing.JInternalFrame {
          
          if(fname.isEmpty() || cnum.isEmpty() || add.isEmpty() || govn.isEmpty() || checkInDate==null || checkOutDate==null){
             JOptionPane.showMessageDialog( null, "Please Fill All Fields.", "Try Again", JOptionPane.ERROR_MESSAGE);       
-         }else if(rnum.isEmpty()){
-             JOptionPane.showMessageDialog( null, "Select a Room. Click a row from the Table.", "Try Again", JOptionPane.ERROR_MESSAGE);
+         }else if(rnum.isEmpty() && rprice1.getText().trim().isEmpty()){
+             JOptionPane.showMessageDialog( null, "Please select a room. Click a row from the Table.", "Try Again", JOptionPane.ERROR_MESSAGE);
          }else if(advanceBreakdown.isEmpty() || discountBreakdown.isEmpty() || finalTotalCalculation.isEmpty()){
              JOptionPane.showMessageDialog( null, "Please click the generate button before proceeding.", "Try Again", JOptionPane.ERROR_MESSAGE);
+         }else if(checkInDate.after(checkOutDate)){
+             JOptionPane.showMessageDialog( null, "Invalid check in date!", "Try Again", JOptionPane.ERROR_MESSAGE);
          }else if(checkInDate.after(checkOutDate)){
              JOptionPane.showMessageDialog( null, "Invalid check in date!", "Try Again", JOptionPane.ERROR_MESSAGE);
          }else{           
@@ -578,27 +581,29 @@ public class CheckIN extends javax.swing.JInternalFrame {
             noOfdays.setText(String.valueOf(getDays()));
                  
             int discount = Integer.parseInt(discountField.getText());
-             
-            int result = JOptionPane.showConfirmDialog(null,"Sure? Allocate room?", "CONFIRMATION",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-             switch (result) {
-                 case JOptionPane.YES_OPTION -> {
-                     int sulod = dbc.insertData("INSERT INTO client(roomno, Fullname, Cnumber, Address, GovType, GovID, CheckIN, CheckOUT, Rprice, Paid, Discount, TOTAL, Stat)"
-                    + "VALUES('"+rnum+"', '"+fname+"', '"+cnum+"', '"+add+"', '"+govt+"', '"+govn+"', '"+datein+"', '"+dateout+"', '"+roomPrice+"', '"+advancePayment+"', '"+discount+"', '"+finalPrice+"', '"+Stat+"')");
-                    
-                     if(sulod == 1){
-                     JOptionPane.showMessageDialog( null, "Allocated Successfully!");
-                     dbc.updateData("UPDATE room set status='"+occupied+"' WHERE roomnumber ='"+rnum+"'");
+            
+            if(advancePayment < finalDiscountValue+1000){
+                int result = JOptionPane.showConfirmDialog(null,"Sure? Allocate room?", "CONFIRMATION",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+                 switch (result) {
+                     case JOptionPane.YES_OPTION -> {
+                         int sulod = dbc.insertData("INSERT INTO client(roomno, Fullname, Cnumber, Address, GovType, GovID, CheckIN, CheckOUT, Rprice, Paid, Discount, TOTAL, Stat)"
+                        + "VALUES('"+rnum+"', '"+fname+"', '"+cnum+"', '"+add+"', '"+govt+"', '"+govn+"', '"+datein+"', '"+dateout+"', '"+roomPrice+"', '"+advancePayment+"', '"+discount+"', '"+finalPrice+"', '"+Stat+"')");
+
+                         if(sulod == 1){
+                         JOptionPane.showMessageDialog( null, "Allocated Successfully!");
+                         dbc.updateData("UPDATE room set status='"+occupied+"' WHERE roomnumber ='"+rnum+"'");
+                         }
+
+                         displayData();
                      }
-                     
-                     displayData();
+                     case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
+                     case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
+                     default -> {}
                  }
-                 case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
-                 case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
-                 default -> {}
-             }
-         }
+                }else{ JOptionPane.showMessageDialog(null, "Payment must not exceed total price by 1000", "Try Again", JOptionPane.ERROR_MESSAGE); }
+            }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -606,12 +611,12 @@ public class CheckIN extends javax.swing.JInternalFrame {
         TableModel model = jTable1.getModel();
         roomnum.setText(""+model.getValueAt(rowindex, 0));
         
-//        if (rowindex != -1) {
-//            // Get the value from the selected row's second column (index 1)
-//            String value = (String) model.getValueAt(rowindex, 1);
-//            // Set the selected item in the combo box
-//            ctype.setSelectedItem(value);
-//        }
+        if (rowindex != -1) {
+            // Get the value from the selected row's second column (index 1)
+            String value = (String) model.getValueAt(rowindex, 1);
+            // Set the selected item in the combo box
+            ctype.setSelectedItem(value);
+        }
         rprice1.setText(""+model.getValueAt(rowindex, 2));
 
         
@@ -714,45 +719,41 @@ public class CheckIN extends javax.swing.JInternalFrame {
         String advanceField = advance.getText().trim();
         String discountInput = discountField.getText().trim();
         
-        
-        if(checkInDate!=null && checkOutDate!=null && !rprice1.getText().trim().isEmpty() && checkOutDate.after(checkInDate)){
-            int rp = Integer.parseInt(rprice1.getText());
-            int totalRoomPrice = rp * getDays();
-            rtprice.setText(String.valueOf(totalRoomPrice));
-            noOfdays.setText(String.valueOf(getDays()));
-         }
-            if(advanceField.isEmpty()){
+        if(advanceField.isEmpty()){
                 advanceB.setText("0");
+                advance.setText("0");
             }else{
                 advanceB.setText(advanceField);
             }
             if(discountInput.isEmpty()){
                 discountB.setText("0");
+                discountField.setText("0");
             }else{
                 discountB.setText(discountInput);
             }
             
-        if(!rtprice.getText().trim().isEmpty() && !advanceB.getText().trim().isEmpty() && !discountB.getText().trim().isEmpty()){
-            String advancePaymentTxt = advance.getText().trim();
-            if(discountField.getText().trim().isEmpty()){
-                discountField.setText("0");
-            }
+        if(checkInDate!=null && checkOutDate!=null && !rprice1.getText().trim().isEmpty() && checkOutDate.after(checkInDate)){       
             String discountBreakdownTxt = discountField.getText().trim();
+            String advancePaymentTxt = advance.getText().trim();
+
             int roomPrice = Integer.parseInt(rprice1.getText());
             int advancePayment = Integer.parseInt(advancePaymentTxt);
             int totalRoomPrice = roomPrice * getDays();
-            int pendingAmount = totalRoomPrice - advancePayment;      
-            
+            int pendingAmount = totalRoomPrice - advancePayment;
+
             double inputDiscount = Double.parseDouble(discountBreakdownTxt);
             double totalPrice = Double.parseDouble(String.valueOf(pendingAmount));
             double discountValue = totalPrice * (inputDiscount / 100);
-            
+
             int finalDiscountValue = (int) Math.ceil(discountValue);
             int finalPrice = pendingAmount - finalDiscountValue;
             
+            rtprice.setText(String.valueOf(totalRoomPrice));
+            noOfdays.setText(String.valueOf(getDays()));
             discountB.setText(String.valueOf(finalDiscountValue));
             rtotal.setText(String.valueOf(finalPrice));
-        }
+         }
+            
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost

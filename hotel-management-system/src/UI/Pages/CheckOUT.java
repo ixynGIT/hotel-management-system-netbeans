@@ -32,7 +32,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     int mouseX;
     int mouseY;
     dbConnector dbc = new dbConnector();
-    
+    private int discountGlobal;
     public CheckOUT() {
         initComponents();
 
@@ -42,6 +42,10 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         BasicInternalFrameUI bi = (BasicInternalFrameUI)this.getUI();
         bi.setNorthPane(null);
         
+        receiptButton.setVisible(false);
+        receipt.setVisible(false);        
+        checkoutDiscount.setVisible(false);
+        roomprice.setVisible(false);
         jTable1.setDefaultEditor(Object.class, null);
     }
     
@@ -126,9 +130,14 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         btn_refresh = new javax.swing.JButton();
         jLabel24 = new javax.swing.JLabel();
         rptotal = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        receiptButton = new javax.swing.JButton();
+        checkOutButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         roomno = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        receipt = new javax.swing.JTextArea();
+        checkoutDiscount = new javax.swing.JLabel();
+        roomprice = new javax.swing.JLabel();
 
         jDialog1.setResizable(false);
         jDialog1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -261,8 +270,9 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         jLabel1.setText("Change :");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, -1, -1));
 
+        change.setEditable(false);
         change.setBorder(null);
-        jPanel2.add(change, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, -1, -1));
+        jPanel2.add(change, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, 80, -1));
 
         clientid1.setEditable(false);
         clientid1.setForeground(new java.awt.Color(255, 255, 255));
@@ -309,7 +319,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
 
         jLabel14.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
         jLabel14.setText("Room Number:");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, -1, -1));
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
         jLabel15.setText("Amount Paid:");
@@ -346,11 +356,6 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         jPanel1.add(checkIN, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 160, -1));
 
         pendingPrice.setEditable(false);
-        pendingPrice.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                pendingPricePropertyChange(evt);
-            }
-        });
         jPanel1.add(pendingPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, 140, -1));
 
         rprice.setEditable(false);
@@ -361,11 +366,11 @@ public class CheckOUT extends javax.swing.JInternalFrame {
 
         fullname.setEditable(false);
         fullname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel1.add(fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, 290, -1));
+        jPanel1.add(fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, 290, -1));
 
         jLabel23.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
         jLabel23.setText("Full Name:");
-        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, -1, -1));
+        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 43, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Malgun Gothic", 0, 18)); // NOI18N
         jLabel5.setText("/ Check OUT");
@@ -408,17 +413,26 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         rptotal.setEditable(false);
         jPanel1.add(rptotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 140, -1));
 
-        jButton1.setBackground(new java.awt.Color(213, 128, 34));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("CHECK OUT");
-        jButton1.setBorderPainted(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        receiptButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        receiptButton.setText("RECEIPT");
+        receiptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                receiptButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 100, 40));
+        jPanel1.add(receiptButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 10, 100, 40));
+
+        checkOutButton.setBackground(new java.awt.Color(213, 128, 34));
+        checkOutButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        checkOutButton.setForeground(new java.awt.Color(255, 255, 255));
+        checkOutButton.setText("CHECK OUT");
+        checkOutButton.setBorderPainted(false);
+        checkOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkOutButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(checkOutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 100, 40));
 
         jLabel4.setText("Client ID:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
@@ -426,7 +440,20 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         roomno.setEditable(false);
         roomno.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
         roomno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel1.add(roomno, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, 90, -1));
+        jPanel1.add(roomno, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 17, 90, -1));
+
+        receipt.setEditable(false);
+        receipt.setColumns(20);
+        receipt.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        receipt.setRows(5);
+        receipt.setWrapStyleWord(true);
+        receipt.setMaximumSize(new java.awt.Dimension(232, 80));
+        receipt.setMinimumSize(new java.awt.Dimension(232, 80));
+        jScrollPane2.setViewportView(receipt);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, 330, 240));
+        jPanel1.add(checkoutDiscount, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 290, 40, 20));
+        jPanel1.add(roomprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 290, 50, 20));
 
         jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -468,13 +495,16 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int rowindex = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
-        clientid.setText(""+model.getValueAt(rowindex, 13));
         roomno.setText(""+model.getValueAt(rowindex, 0));
         fullname.setText(""+model.getValueAt(rowindex, 1));
         govtype.setSelectedItem(model.getValueAt(rowindex, 4));
         govno.setText(""+model.getValueAt(rowindex, 5));
         checkIN.setText("" + model.getValueAt(rowindex, 6));
         checkOUT.setText("" + model.getValueAt(rowindex, 7));
+        roomprice.setText("" + model.getValueAt(rowindex, 8));
+        checkoutDiscount.setText(""+ model.getValueAt(rowindex, 10));
+        clientid.setText("" + model.getValueAt(rowindex, 13));
+
         
         int roomPrice = Integer.parseInt(""+model.getValueAt(rowindex, 8));
         int totalDiscountedPrice = Integer.parseInt("" + model.getValueAt(rowindex, 11));
@@ -486,9 +516,20 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         try {
             int totalRoomPrice = roomPrice * getDays(); 
             int pending = totalDiscountedPrice - paidAmount;
-            
+            if(pending < 0){
+                pending = 0;
+            }
             rprice.setText(String.valueOf(totalRoomPrice));
             pendingPrice.setText(String.valueOf(pending));
+            if (pendingPrice.getText().equals("0")){
+                checkOutButton.setBackground(new Color(0, 153, 0));
+                receiptButton.setVisible(true);
+                receipt.setVisible(true);
+            }else{
+                checkOutButton.setBackground(new Color(213,128,34));
+                receiptButton.setVisible(false);
+                receipt.setVisible(false);
+            }
         } catch (ParseException ex) {
             Logger.getLogger(CheckOUT.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -522,8 +563,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         paid.setText("");
         pendingPrice.setText("");
 
-
-        
+        checkOutButton.setBackground(new Color(213, 128, 34));     
 
         displayData();
     }//GEN-LAST:event_btn_refreshActionPerformed
@@ -551,7 +591,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                switch (result) {
                    case JOptionPane.YES_OPTION -> {
                       
-                      dbc.updateData("Update client set Paid='"+amountPaid+"', Pending='"+pending+"' where roomno='"+roomno1.getText()+"'");
+                      dbc.updateData("Update client set Paid='"+amountPaid+"' where clientid='"+clientid1.getText()+"'");
                    }
                    case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
                    case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
@@ -563,64 +603,69 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-                      String amountPaidField = paid1.getText().trim();
-                      int totalPaid = Integer.parseInt(paid2.getText());
-                      int pendingAmount = Integer.parseInt(pend.getText());
-                      int totalCost = Integer.parseInt(tprice1.getText());
-                        
-                    if (amountPaidField.isEmpty()){
-                        JOptionPane optionPane = new JOptionPane(
-                                "Please don't leave the payment field blank.",
-                                JOptionPane.ERROR_MESSAGE);
+        String amountPaidField = paid1.getText().trim();
+        int totalPaid = Integer.parseInt(paid2.getText());
+        int pendingAmount = Integer.parseInt(pend.getText());
+        int totalCost = Integer.parseInt(tprice1.getText());
 
-                        JDialog dialog = optionPane.createDialog("Try Again");
+        if (amountPaidField.isEmpty()) {
+            JOptionPane optionPane = new JOptionPane(
+                    "Please don't leave the payment field blank.",
+                    JOptionPane.ERROR_MESSAGE);
 
-                        dialog.setAlwaysOnTop(true);
-                        dialog.setVisible(true);
+            JDialog dialog = optionPane.createDialog("Try Again");
 
-                    }else {
-                        JOptionPane optionPane = new JOptionPane(
-                                "Want to add input as payment?",
-                                JOptionPane.QUESTION_MESSAGE,
-                                JOptionPane.YES_NO_OPTION);
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
 
-                        JDialog dialog = optionPane.createDialog("CONFIRMATION");
+        } else {
+            JOptionPane optionPane = new JOptionPane(
+                    "Want to add input as payment?",
+                    JOptionPane.QUESTION_MESSAGE,
+                    JOptionPane.YES_NO_OPTION);
 
-                        dialog.setAlwaysOnTop(true);
-                        dialog.setVisible(true);
+            JDialog dialog = optionPane.createDialog("CONFIRMATION");
 
-                        int result = ((Integer) optionPane.getValue());
-                        switch (result) {
-                            case JOptionPane.YES_OPTION -> {
-                                
-                                
-                                int amountPaid = Integer.parseInt(amountPaidField);
-                                int totalpd = totalPaid + amountPaid;
-                                int remainingPending = pendingAmount - amountPaid;
-                                
-                                if(totalpd > totalCost){
-                                    int changeDifference = totalPaid - totalCost;
-                                    change.setText(String.valueOf(changeDifference));
-                                    paid2.setText(String.valueOf(totalpd));
-                                    pend.setText("0");
-                                    paid1.setText("");
-                                }else{
-                                    paid2.setText(String.valueOf(totalpd));
-                                    pend.setText(String.valueOf(remainingPending));
-                                    paid1.setText("");
-                                }
-                            }
-                            case JOptionPane.NO_OPTION ->
-                                System.out.println("You Selected No");
-                            case JOptionPane.CLOSED_OPTION ->
-                                System.out.println("You Closed the prompt");
-                            default -> {
-                            }
-                        }
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+
+            int result = ((Integer) optionPane.getValue());
+            switch (result) {
+                case JOptionPane.YES_OPTION -> {
+                    int amountPaid = Integer.parseInt(amountPaidField);
+                    int totalpd = totalPaid + amountPaid;
+                    int remainingPending = pendingAmount - amountPaid;
+                    
+                    if(totalpd <= totalCost+1000 && remainingPending < 0){
+                        int changeDifference = totalpd - totalCost;
+                        System.out.println(changeDifference); // For debugging purposes
+                        change.setText(String.valueOf(changeDifference));
+                        paid2.setText(String.valueOf(totalpd));
+                        pend.setText("0");
+                        paid1.setText("");
                     }
-           
-            
-            
+                    else if (totalpd > totalCost+1000 && remainingPending < 0) {
+                        JOptionPane alert = new JOptionPane(
+                                "Change must not exceed total price by 1000.",
+                                JOptionPane.ERROR_MESSAGE);
+                        
+                        JDialog alertDialog = alert.createDialog("CONFIRMATION");
+                        alertDialog.setAlwaysOnTop(true);
+                        alertDialog.setVisible(true);
+                    } else {
+                        paid2.setText(String.valueOf(totalpd));
+                        pend.setText(String.valueOf(remainingPending));
+                        paid1.setText("");
+                    }
+                }
+                case JOptionPane.NO_OPTION ->
+                    System.out.println("You Selected No");
+                case JOptionPane.CLOSED_OPTION ->
+                    System.out.println("You Closed the prompt");
+                default -> {
+                }
+            }
+        }
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void paid2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paid2ActionPerformed
@@ -639,30 +684,30 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         mouseY = evt.getY();
     }//GEN-LAST:event_jDialog1MousePressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void checkOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkOutButtonActionPerformed
         String fname = fullname.getText();
-        if(fname.isEmpty()){
-            JOptionPane.showMessageDialog(this,"Please Select A Row.");
-        }else{
-            
+        if (fname.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Select A Row.");
+        } else {
+
             int rptot = Integer.parseInt(rptotal.getText());
             int tptot = Integer.parseInt(pendingPrice.getText());
-            
-            if(tptot==0){
+
+            if (tptot == 0) {
                 int result = JOptionPane.showConfirmDialog(null, "Fully paid. Want to Check out?", "CONFIRMATION",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
                 switch (result) {
                     case JOptionPane.YES_OPTION -> {
                         String avail = "Available";
                         String out = "Checked OUT";
                         int clientID = Integer.parseInt(clientid.getText());
-                        
+
                         int pd = Integer.parseInt(paid.getText());
                         int tp = Integer.parseInt(pendingPrice.getText());
-                        
-                        dbc.updateData("UPDATE room SET status='"+avail+"' where roomnumber='"+roomno.getText()+"' ");
-                        dbc.updateData("UPDATE client SET Paid='"+pd+"', TOTAL='"+tp+"', Stat='"+out+"' WHERE clientid='"+clientID+"' ");
+
+                        dbc.updateData("UPDATE room SET status='" + avail + "' where roomnumber='" + roomno.getText() + "' ");
+                        dbc.updateData("UPDATE client SET Paid='" + pd + "', TOTAL='" + tp + "', Stat='" + out + "' WHERE clientid='" + clientID + "' ");
                         displayData();
                     }
                     case JOptionPane.NO_OPTION ->
@@ -672,28 +717,28 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                     default -> {
                     }
                 }
-                    
-            }else{
+
+            } else {
                 int rp = Integer.parseInt(rprice.getText());
-                    int pd = Integer.parseInt(paid.getText());
-                    int totalprice = rptot - pd;
-                    
-                    clientid1.setVisible(false);
-                    clientid1.setText(clientid.getText());
-                    roomno1.setText(roomno.getText());
-                    fullname1.setText(fname);
-                    rprice1.setText(String.valueOf(rp));
-                    rtotal2.setText(String.valueOf(rptot));
-                    tprice1.setText(String.valueOf(rptot));
-                    paid2.setText(String.valueOf(pd));
-                    pend.setText(String.valueOf(totalprice));
-                    jDialog1.pack();
-                    jDialog1.setVisible(true);
-                    jDialog1.setAlwaysOnTop(true);                   
-           }
-       }
+                int pd = Integer.parseInt(paid.getText());
+                int totalprice = rptot - pd;
+
+                clientid1.setVisible(false);
+                clientid1.setText(clientid.getText());
+                roomno1.setText(roomno.getText());
+                fullname1.setText(fname);
+                rprice1.setText(String.valueOf(rp));
+                rtotal2.setText(String.valueOf(rptot));
+                tprice1.setText(String.valueOf(rptot));
+                paid2.setText(String.valueOf(pd));
+                pend.setText(String.valueOf(totalprice));
+                jDialog1.pack();
+                jDialog1.setVisible(true);
+                jDialog1.setAlwaysOnTop(true);
+            }
+        }
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_checkOutButtonActionPerformed
 
     private void paid1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paid1KeyTyped
         char c = evt.getKeyChar();
@@ -715,11 +760,62 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         pend.setText("");
     }//GEN-LAST:event_jPanel2AncestorRemoved
 
-    private void pendingPricePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_pendingPricePropertyChange
-       String pending = pendingPrice.getText().trim();
-        if(pending.equals(0))
-            jButton1.setBackground(new Color(0,153,0));
-    }//GEN-LAST:event_pendingPricePropertyChange
+    private void receiptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_receiptButtonActionPerformed
+        String fullName = fullname.getText();
+        int firstWord = fullName.indexOf(" ");
+        String firstName = fullName.substring(0, firstWord);
+
+        String roomPriceText =  rprice.getText().trim();
+        String roomNumber = roomno.getText();
+        int clientID = Integer.parseInt(clientid.getText().trim());
+        int paidAmount = Integer.parseInt(paid.getText().trim());
+        int totalDue = Integer.parseInt(rptotal.getText());
+        int totalRoom = Integer.parseInt(roomPriceText);        
+        int discountLabel = Integer.parseInt(checkoutDiscount.getText());
+        
+        java.util.Date date = new java.util.Date();
+        
+        int result = JOptionPane.showConfirmDialog(null, "Want to generate receipt?", "CONFIRMATION",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        switch (result) {
+            case JOptionPane.YES_OPTION -> {               
+                          
+                double totalRoomPrice = Double.parseDouble(roomPriceText);
+                double discount = Double.parseDouble(checkoutDiscount.getText().trim());
+                double discountValue = totalRoomPrice - (totalRoomPrice*(discount/100)); 
+                if(discount == 0){
+                    discountValue = 0;
+                }
+                discountGlobal = (int) Math.ceil(discountValue);
+                String discountAmount = String.valueOf(discountGlobal);
+                if(discountAmount.equals(0)){
+                    discountAmount = "0";
+                }
+                
+                receipt.setText("*****************************************************************************\n");
+                receipt.setText(receipt.getText() + "*                                         CHPATEL HOTEL                                  *\n");
+                receipt.setText(receipt.getText() + "*****************************************************************************\n\n");
+                receipt.setText(receipt.getText() + "                                 " + date + "\n\n");
+                receipt.setText(receipt.getText() + "   Room               Price        Days    Sub-total       Discount        Total\n");
+
+                try {
+                    String formattedLine = String.format("%-15s %8s %7s %10s %10s(%-1s) %14s\n",
+                            roomNumber, roomPriceText, getDays(), totalRoom, discountAmount, discountLabel, totalDue);
+                    receipt.setText(receipt.getText() + formattedLine);
+                } catch (ParseException ex) {
+                    Logger.getLogger(CheckOUT.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            case JOptionPane.NO_OPTION ->
+                System.out.println("You Selected No");
+            case JOptionPane.CLOSED_OPTION ->
+                System.out.println("You Closed the prompt");
+            default -> {
+            }
+        }
+    }//GEN-LAST:event_receiptButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -727,13 +823,14 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     private javax.swing.JTextField change;
     private javax.swing.JTextField checkIN;
     private javax.swing.JTextField checkOUT;
+    private javax.swing.JButton checkOutButton;
+    private javax.swing.JLabel checkoutDiscount;
     private javax.swing.JTextField clientid;
     private javax.swing.JTextField clientid1;
     private javax.swing.JTextField fullname;
     private javax.swing.JTextField fullname1;
     private javax.swing.JTextField govno;
     private javax.swing.JComboBox<String> govtype;
-    private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -761,6 +858,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField paid;
@@ -768,8 +866,11 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     private javax.swing.JTextField paid2;
     private javax.swing.JTextField pend;
     private javax.swing.JTextField pendingPrice;
+    private javax.swing.JTextArea receipt;
+    private javax.swing.JButton receiptButton;
     private javax.swing.JTextField roomno;
     private javax.swing.JTextField roomno1;
+    private javax.swing.JLabel roomprice;
     private javax.swing.JTextField rprice;
     private javax.swing.JTextField rprice1;
     private javax.swing.JTextField rptotal;
