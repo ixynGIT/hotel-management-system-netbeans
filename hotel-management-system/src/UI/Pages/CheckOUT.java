@@ -451,7 +451,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         receipt.setMinimumSize(new java.awt.Dimension(232, 80));
         jScrollPane2.setViewportView(receipt);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, 330, 240));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 290, 240));
         jPanel1.add(checkoutDiscount, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 290, 40, 20));
         jPanel1.add(roomprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 290, 50, 20));
 
@@ -564,7 +564,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         pendingPrice.setText("");
 
         checkOutButton.setBackground(new Color(213, 128, 34));     
-
+        receipt.setText("");
         displayData();
     }//GEN-LAST:event_btn_refreshActionPerformed
 
@@ -708,6 +708,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
 
                         dbc.updateData("UPDATE room SET status='" + avail + "' where roomnumber='" + roomno.getText() + "' ");
                         dbc.updateData("UPDATE client SET Paid='" + pd + "', TOTAL='" + tp + "', Stat='" + out + "' WHERE clientid='" + clientID + "' ");
+                        receipt.setText("");     
                         displayData();
                     }
                     case JOptionPane.NO_OPTION ->
@@ -765,14 +766,14 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         int firstWord = fullName.indexOf(" ");
         String firstName = fullName.substring(0, firstWord);
 
-        String roomPriceText =  rprice.getText().trim();
+        String roomPrice =  roomprice.getText().trim();
+        String totalRoomPrice = rprice.getText().trim();
         String roomNumber = roomno.getText();
-        int clientID = Integer.parseInt(clientid.getText().trim());
         int paidAmount = Integer.parseInt(paid.getText().trim());
         int totalDue = Integer.parseInt(rptotal.getText());
-        int totalRoom = Integer.parseInt(roomPriceText);        
+        int totalRoom = Integer.parseInt(totalRoomPrice);        
         int discountLabel = Integer.parseInt(checkoutDiscount.getText());
-        
+        int change  = totalDue - paidAmount;
         java.util.Date date = new java.util.Date();
         
         int result = JOptionPane.showConfirmDialog(null, "Want to generate receipt?", "CONFIRMATION",
@@ -781,9 +782,10 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         switch (result) {
             case JOptionPane.YES_OPTION -> {               
                           
-                double totalRoomPrice = Double.parseDouble(roomPriceText);
+                double totalRoomPriceDouble = Double.parseDouble(totalRoomPrice);
                 double discount = Double.parseDouble(checkoutDiscount.getText().trim());
-                double discountValue = totalRoomPrice - (totalRoomPrice*(discount/100)); 
+                double discountValue = totalRoomPriceDouble - (totalRoomPriceDouble*(discount/100)); 
+                
                 if(discount == 0){
                     discountValue = 0;
                 }
@@ -793,19 +795,24 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                     discountAmount = "0";
                 }
                 
-                receipt.setText("*****************************************************************************\n");
-                receipt.setText(receipt.getText() + "*                                         CHPATEL HOTEL                                  *\n");
-                receipt.setText(receipt.getText() + "*****************************************************************************\n\n");
-                receipt.setText(receipt.getText() + "                                 " + date + "\n\n");
-                receipt.setText(receipt.getText() + "   Room               Price        Days    Sub-total       Discount        Total\n");
+                receipt.setText("*******************************************************************\n");
+                receipt.setText(receipt.getText() + "*                                  CHPATEL HOTEL                            *\n");
+                receipt.setText(receipt.getText() + "*******************************************************************\n");
+                receipt.setText(receipt.getText() + "                          " + date + "\n\n");
+                receipt.setText(receipt.getText() + "                            Room: "+roomNumber+"\n");
+                receipt.setText(receipt.getText() + "                            Price: " + roomPrice + "\n");
+            try {
+                receipt.setText(receipt.getText() + "                            Days: " + getDays() + "\n");
+            } catch (ParseException ex) {
+                Logger.getLogger(CheckOUT.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                receipt.setText(receipt.getText() + "                            Sub-total: " + totalRoomPrice + "\n");
+                receipt.setText(receipt.getText() + "                            Discount: " + discountAmount + "("+discountLabel+"%)\n");
+                receipt.setText(receipt.getText() + "                            TOTAL: " + totalDue + "\n");
+                receipt.setText(receipt.getText() + "                            Paid: " + paidAmount + "\n");
+                receipt.setText(receipt.getText() + "                            Change: " + change + "\n\n");
+                receipt.setText(receipt.getText() + "                Thank you, and come again, " + firstName + "!");
 
-                try {
-                    String formattedLine = String.format("%-15s %8s %7s %10s %10s(%-1s) %14s\n",
-                            roomNumber, roomPriceText, getDays(), totalRoom, discountAmount, discountLabel, totalDue);
-                    receipt.setText(receipt.getText() + formattedLine);
-                } catch (ParseException ex) {
-                    Logger.getLogger(CheckOUT.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 
             }
             case JOptionPane.NO_OPTION ->

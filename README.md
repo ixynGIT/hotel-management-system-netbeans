@@ -1,6 +1,6 @@
 ## CHPATEL HOTEL MANAGEMENT SYSTEM
 
-A hotel management made in the compliance for final grading in school.
+A hotel management made in the compliance for final grading in school for school year 2022-2023.
 
 ## Pre-requisite
   **Netbeans must be installed in order for the code to work**   
