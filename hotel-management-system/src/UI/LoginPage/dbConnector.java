@@ -49,8 +49,23 @@ public class dbConnector {
                 int rowsUpdated = pst.executeUpdate();
                 if (rowsUpdated > 0){
                     JOptionPane.showMessageDialog(null, "Data Updated Successfully!");
+                    JOptionPane optionPane = new JOptionPane(
+                            "Data Updated Successfully!",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    JDialog dialog = optionPane.createDialog("Try Again");
+
+                    dialog.setAlwaysOnTop(true);
+                    dialog.setVisible(true);
                 }else{
-                    JOptionPane.showMessageDialog(null, "Data Failed to Update");
+                    JOptionPane optionPane = new JOptionPane(
+                            "Failed to Update Data.",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    JDialog dialog = optionPane.createDialog("Try Again");
+
+                    dialog.setAlwaysOnTop(true);
+                    dialog.setVisible(true);
                 }
             }
         }catch(SQLException ex){
@@ -63,12 +78,28 @@ public class dbConnector {
         try {
             PreparedStatement pst = connect.prepareStatement(sql);
             pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Data deleted successfully!");
+            JOptionPane.showMessageDialog(null, "Failed to Delete Data.");
+                    JOptionPane optionPane = new JOptionPane(
+                            "Data Updated Successfully!",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    JDialog dialog = optionPane.createDialog("Try Again");
+
+                    dialog.setAlwaysOnTop(true);
+                    dialog.setVisible(true);
             pst.close();
             result=1;
             
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Data failed to delete.");
+            JOptionPane.showMessageDialog(null, "Data Failed Successfully!");
+                    JOptionPane optionPane = new JOptionPane(
+                            "Data Updated Successfully!",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    JDialog dialog = optionPane.createDialog("Try Again");
+
+                    dialog.setAlwaysOnTop(true);
+                    dialog.setVisible(true);
             System.out.println("Date failed to update: "+ e);
             result=0;
         }

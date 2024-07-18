@@ -90,7 +90,20 @@ public class CheckIN extends javax.swing.JInternalFrame {
         
     }
     */
+    private int discountValue(int inputtedDiscount){
+        String discountBreakdownTxt = (String)String.valueOf(inputtedDiscount);
+        
+        int roomPrice = Integer.parseInt(rprice1.getText());
+        int totalRoomPrice = roomPrice * getDays();
 
+        double inputDiscount = Double.parseDouble(discountBreakdownTxt);
+        double totalPrice = Double.parseDouble(String.valueOf(totalRoomPrice));
+        double discountValue = totalPrice * (inputDiscount / 100);
+
+        int finalDiscountValue = (int) Math.ceil(discountValue);
+        return finalDiscountValue;
+    }
+    
     private void storeOriginalData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
@@ -420,23 +433,23 @@ public class CheckIN extends javax.swing.JInternalFrame {
         jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 211, 30, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        jLabel16.setText("advance payment");
+        jLabel16.setText("discount");
         jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 466, -1, -1));
 
         discountB.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         discountB.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jPanel1.add(discountB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 493, 70, 10));
+        jPanel1.add(discountB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 470, 70, 10));
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel20.setText("-");
         jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, -1, -1));
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        jLabel21.setText("discount");
+        jLabel21.setText("advance payment");
         jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 488, -1, -1));
 
         advanceB.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jPanel1.add(advanceB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 470, 70, 10));
+        jPanel1.add(advanceB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 493, 70, 10));
 
         jButton2.setText("Generate");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -562,27 +575,24 @@ public class CheckIN extends javax.swing.JInternalFrame {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String datein = sdf.format(checkIN.getDate());
             String dateout = sdf.format(checkOUT.getDate());
-                       
-            int roomPrice = Integer.parseInt(rprice1.getText());
-            int advancePayment = Integer.parseInt(advanceBreakdown);
-            int totalRoomPrice = roomPrice * getDays();
-            int pendingAmount = totalRoomPrice - advancePayment;      
             
-            double inputDiscount = Double.parseDouble(discountBreakdown);
-            double totalPrice = Double.parseDouble(String.valueOf(pendingAmount));
-            double discountValue = totalPrice * (inputDiscount / 100);
             
-            int finalDiscountValue = (int) Math.ceil(discountValue);
-            int finalPrice = pendingAmount - finalDiscountValue;
-
-            discountB.setText(String.valueOf(finalDiscountValue));
-            rtprice.setText(String.valueOf(totalRoomPrice));
-            rtotal.setText(String.valueOf(finalPrice));
-            noOfdays.setText(String.valueOf(getDays()));
-                 
-            int discount = Integer.parseInt(discountField.getText());
+             String advancePaymentTxt = advance.getText().trim();
+             int discount = Integer.parseInt(discountField.getText().trim());
+             int advancePayment = Integer.parseInt(advancePaymentTxt);
+             int roomPrice = Integer.parseInt(rprice1.getText());
+             int totalRoomPrice = roomPrice * getDays();
+             int pendingAmount = totalRoomPrice - advancePayment;
+             int discountValue = discountValue(discount);
+             int finalPrice = pendingAmount - discountValue;
+             int maxValue = totalRoomPrice - discountValue;
+             
+             rtprice.setText(String.valueOf(totalRoomPrice));
+             noOfdays.setText(String.valueOf(getDays()));
+             discountB.setText(String.valueOf(discountValue));
+             rtotal.setText(String.valueOf(finalPrice));
             
-            if(advancePayment < finalDiscountValue+1000){
+            if(advancePayment <= maxValue){
                 int result = JOptionPane.showConfirmDialog(null,"Sure? Allocate room?", "CONFIRMATION",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
@@ -602,7 +612,12 @@ public class CheckIN extends javax.swing.JInternalFrame {
                      case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
                      default -> {}
                  }
-                }else{ JOptionPane.showMessageDialog(null, "Payment must not exceed total price by 1000", "Try Again", JOptionPane.ERROR_MESSAGE); }
+                }else{ 
+                    JOptionPane.showMessageDialog(null, "Payment must not exceed total price.", "Try Again", JOptionPane.ERROR_MESSAGE);
+                    rtotal.setText("");
+                    advanceB.setText("");
+                    advance.requestFocus();
+                }
             }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -669,34 +684,42 @@ public class CheckIN extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int result = JOptionPane.showConfirmDialog(null, discountPanel, "Discount Percentage", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         String input = discountField.getText().trim();
+        java.util.Date checkInDate = checkIN.getDate();
+        java.util.Date checkOutDate = checkOUT.getDate();
+        if (input.isEmpty()) {
+           input = "0";
+        }
         
-        if (result == JOptionPane.OK_OPTION && !input.isEmpty()) {
+        if (result == JOptionPane.OK_OPTION) {
+                
                 int discountInt = Integer.parseInt(input);
+                
+                if(advance.getText().trim().isEmpty()){
+                    advance.setText("0");
+                    advanceB.setText("0");
+                }else{
+                    advanceB.setText("0");
+                }
+                
                 
                 if(discountInt > 100){
                     JOptionPane.showMessageDialog(null, "Discount should not exceed 100.", "Try Again", JOptionPane.ERROR_MESSAGE);
                     discountField.setText("");
                 }else{
                     System.out.println("Discount input: " + input);
-
-                    jTextField2.setText(input + "%");
-                    if (!rtprice.getText().trim().isEmpty() && !advanceB.getText().trim().isEmpty()) {
-                        String advancePaymentTxt = advance.getText().trim();
-                        String discountBreakdownTxt = discountField.getText().trim();
-                        int roomPrice = Integer.parseInt(rprice1.getText());
-                        int advancePayment = Integer.parseInt(advancePaymentTxt);
-                        int totalRoomPrice = roomPrice * getDays();
-                        int pendingAmount = totalRoomPrice - advancePayment;
-
-                        double inputDiscount = Double.parseDouble(discountBreakdownTxt);
-                        double totalPrice = Double.parseDouble(String.valueOf(pendingAmount));
-                        double discountValue = totalPrice * (inputDiscount / 100);
+                    
+                    if(input.equals("0")){
+                        jTextField2.setText("No");
+                    }else{
+                        jTextField2.setText(input + "%");
+                    }
+                    if (!rtprice.getText().trim().isEmpty() && !advanceB.getText().trim().isEmpty() && checkInDate!=null && checkOutDate!=null) {
+                        String discountFieldText = discountField.getText().trim();
+                        int discountFieldInt = Integer.parseInt(discountFieldText);
+                        int discountValue = discountValue(discountFieldInt);                   
                         
-                        int finalDiscountValue = (int) Math.ceil(discountValue);
-                        int finalPrice = pendingAmount - finalDiscountValue;
-
-                        discountB.setText(String.valueOf(finalDiscountValue));
-                        rtotal.setText(String.valueOf(finalPrice));
+                        discountB.setText(String.valueOf(discountValue));
+                        rtotal.setText("");
                     }
                 }
                 
@@ -733,25 +756,29 @@ public class CheckIN extends javax.swing.JInternalFrame {
             }
             
         if(checkInDate!=null && checkOutDate!=null && !rprice1.getText().trim().isEmpty() && checkOutDate.after(checkInDate)){       
-            String discountBreakdownTxt = discountField.getText().trim();
-            String advancePaymentTxt = advance.getText().trim();
-
-            int roomPrice = Integer.parseInt(rprice1.getText());
+            String advancePaymentTxt = advance.getText().trim();      
+            int discountInputFunction = Integer.parseInt(discountField.getText().trim());
             int advancePayment = Integer.parseInt(advancePaymentTxt);
+            int roomPrice = Integer.parseInt(rprice1.getText());
             int totalRoomPrice = roomPrice * getDays();
             int pendingAmount = totalRoomPrice - advancePayment;
-
-            double inputDiscount = Double.parseDouble(discountBreakdownTxt);
-            double totalPrice = Double.parseDouble(String.valueOf(pendingAmount));
-            double discountValue = totalPrice * (inputDiscount / 100);
-
-            int finalDiscountValue = (int) Math.ceil(discountValue);
-            int finalPrice = pendingAmount - finalDiscountValue;
+            int discountValue = discountValue(discountInputFunction);
+            int finalPrice = pendingAmount - discountValue;
+            int maxValue = totalRoomPrice - discountValue;
             
-            rtprice.setText(String.valueOf(totalRoomPrice));
-            noOfdays.setText(String.valueOf(getDays()));
-            discountB.setText(String.valueOf(finalDiscountValue));
-            rtotal.setText(String.valueOf(finalPrice));
+            if(advancePayment > maxValue){
+                JOptionPane.showMessageDialog(null, "Payment must not exceed total price.", "Try Again", JOptionPane.ERROR_MESSAGE);
+                rtotal.setText("");
+                advanceB.setText("");
+                advance.requestFocus();
+            }else{
+                rtprice.setText(String.valueOf(totalRoomPrice));
+                noOfdays.setText(String.valueOf(getDays()));
+                discountB.setText(String.valueOf(discountValue));
+                rtotal.setText(String.valueOf(finalPrice));
+            }
+            
+                       
          }
             
     }//GEN-LAST:event_jButton2ActionPerformed

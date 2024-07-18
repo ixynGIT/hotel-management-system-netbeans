@@ -585,7 +585,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="10" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="advance payment"/>
+            <Property name="text" type="java.lang.String" value="discount"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -602,7 +602,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="30" y="493" width="70" height="10"/>
+              <AbsoluteConstraints x="30" y="470" width="70" height="10"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -624,7 +624,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="10" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="discount"/>
+            <Property name="text" type="java.lang.String" value="advance payment"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -638,7 +638,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="30" y="470" width="70" height="10"/>
+              <AbsoluteConstraints x="30" y="493" width="70" height="10"/>
             </Constraint>
           </Constraints>
         </Component>

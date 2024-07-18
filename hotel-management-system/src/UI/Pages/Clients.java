@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
@@ -39,6 +40,7 @@ public class Clients extends javax.swing.JInternalFrame {
         BasicInternalFrameUI bi = (BasicInternalFrameUI)this.getUI();
         bi.setNorthPane(null);
         
+        discount.setVisible(false);
         jTable1.setDefaultEditor(Object.class, null);
     }
     
@@ -93,6 +95,9 @@ public class Clients extends javax.swing.JInternalFrame {
         tprice1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        change = new javax.swing.JTextField();
+        clientid1 = new javax.swing.JTextField();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -134,7 +139,10 @@ public class Clients extends javax.swing.JInternalFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
         clientid = new javax.swing.JTextField();
+        discount = new javax.swing.JLabel();
 
+        jDialog1.setAlwaysOnTop(true);
+        jDialog1.setResizable(false);
         jDialog1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jDialog1MouseDragged(evt);
@@ -147,7 +155,15 @@ public class Clients extends javax.swing.JInternalFrame {
         });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setFocusTraversalPolicyProvider(true);
+        jPanel2.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+                jPanel2AncestorRemoved(evt);
+            }
+        });
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel13.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
@@ -159,61 +175,67 @@ public class Clients extends javax.swing.JInternalFrame {
                 jLabel13MouseClicked(evt);
             }
         });
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 270, 60, 20));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 270, 40, 20));
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel25.setText("Room Price:");
-        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
         rprice1.setEditable(false);
         rprice1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rprice1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(rprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 140, -1));
+        jPanel2.add(rprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 140, -1));
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel26.setText("Add Payment:");
-        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
 
         rtotal2.setEditable(false);
         rtotal2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rtotal2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(rtotal2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 140, -1));
+        jPanel2.add(rtotal2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 140, -1));
 
         fullname1.setEditable(false);
         fullname1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         fullname1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         fullname1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(fullname1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 240, -1));
+        jPanel2.add(fullname1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 240, -1));
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel27.setText("Full Name:");
-        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 60, -1));
+        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 60, -1));
 
         roomno1.setEditable(false);
         roomno1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         roomno1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         roomno1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(roomno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 130, -1));
+        jPanel2.add(roomno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 130, -1));
 
         jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel28.setText("Room Number:");
-        jPanel2.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 100, -1));
+        jPanel2.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 100, -1));
 
         pend.setEditable(false);
         pend.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         pend.setForeground(new java.awt.Color(88, 168, 105));
         pend.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         pend.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(pend, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 100, 20));
+        jPanel2.add(pend, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 100, 20));
 
         jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel29.setText("Pending Payment:");
-        jPanel2.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, 100, -1));
+        jPanel2.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 100, -1));
 
         jLabel30.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel30.setText("Amount Paid:");
-        jPanel2.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
-        jPanel2.add(paid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 140, -1));
+        jPanel2.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+
+        paid1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                paid1KeyTyped(evt);
+            }
+        });
+        jPanel2.add(paid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 140, -1));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus.png"))); // NOI18N
@@ -223,7 +245,7 @@ public class Clients extends javax.swing.JInternalFrame {
                 jLabel2MouseClicked(evt);
             }
         });
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 204, 40, 30));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 175, 40, 30));
 
         paid2.setEditable(false);
         paid2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -233,19 +255,32 @@ public class Clients extends javax.swing.JInternalFrame {
                 paid2ActionPerformed(evt);
             }
         });
-        jPanel2.add(paid2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 140, -1));
+        jPanel2.add(paid2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 140, -1));
 
         tprice1.setEditable(false);
         tprice1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel2.add(tprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, 90, -1));
+        jPanel2.add(tprice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 90, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("/");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, -1, -1));
 
         jLabel31.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel31.setText("Room Total:");
-        jPanel2.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+        jPanel2.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel6.setText("Change :");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, -1, -1));
+
+        change.setEditable(false);
+        change.setBorder(null);
+        jPanel2.add(change, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, 80, -1));
+
+        clientid1.setEditable(false);
+        clientid1.setForeground(new java.awt.Color(255, 255, 255));
+        clientid1.setBorder(null);
+        jPanel2.add(clientid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -302,7 +337,7 @@ public class Clients extends javax.swing.JInternalFrame {
         jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 60, -1, -1));
 
         jLabel18.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
-        jLabel18.setText("Total Price:");
+        jLabel18.setText("Pending:");
         jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, -1, -1));
 
         jLabel19.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
@@ -327,7 +362,11 @@ public class Clients extends javax.swing.JInternalFrame {
         jPanel1.add(checkIN, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, 140, -1));
 
         tprice.setEditable(false);
+        tprice.setFocusable(false);
         jPanel1.add(tprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 180, 140, -1));
+
+        rprice.setEditable(false);
+        rprice.setFocusable(false);
         jPanel1.add(rprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 60, 140, -1));
         jPanel1.add(paid, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 140, 140, -1));
         jPanel1.add(fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 140, -1));
@@ -402,10 +441,11 @@ public class Clients extends javax.swing.JInternalFrame {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(722, 230, 70, -1));
 
         jLabel24.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
-        jLabel24.setText("Room Total:");
+        jLabel24.setText("Total Price:");
         jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, -1, -1));
 
         rptotal.setEditable(false);
+        rptotal.setFocusable(false);
         jPanel1.add(rptotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 140, -1));
 
         jLabel16.setFont(new java.awt.Font("Microsoft YaHei", 0, 11)); // NOI18N
@@ -440,6 +480,7 @@ public class Clients extends javax.swing.JInternalFrame {
         clientid.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
         clientid.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel1.add(clientid, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 90, -1));
+        jPanel1.add(discount, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 220, 40, 20));
 
         jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -479,22 +520,41 @@ public class Clients extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        int rowindex = jTable1.getSelectedRow();
-        TableModel model = jTable1.getModel();
-        roomno.setText(""+model.getValueAt(rowindex, 0));
-        fullname.setText(""+model.getValueAt(rowindex, 1));
-        cnum.setText(""+model.getValueAt(rowindex, 2));
-        address.setText(""+model.getValueAt(rowindex, 3));
-        govtype.setSelectedItem(model.getValueAt(rowindex, 4));
-        govno.setText(""+model.getValueAt(rowindex, 5));
-        checkIN.setText("" + model.getValueAt(rowindex, 6));
-        checkOUT.setText("" + model.getValueAt(rowindex, 7));
-        rprice.setText(""+model.getValueAt(rowindex, 8));
-        rptotal.setText(""+model.getValueAt(rowindex, 9));
-        paid.setText(""+model.getValueAt(rowindex, 10));
-        tprice.setText(""+model.getValueAt(rowindex, 11));
-        status.setText(""+model.getValueAt(rowindex, 12));
-        clientid.setText(""+model.getValueAt(rowindex, 13));
+        try {
+            int rowindex = jTable1.getSelectedRow();
+            TableModel model = jTable1.getModel();
+            roomno.setText(""+model.getValueAt(rowindex, 0));
+            fullname.setText(""+model.getValueAt(rowindex, 1));
+            cnum.setText(""+model.getValueAt(rowindex, 2));
+            address.setText(""+model.getValueAt(rowindex, 3));
+            govtype.setSelectedItem(model.getValueAt(rowindex, 4));
+            govno.setText(""+model.getValueAt(rowindex, 5));
+            checkIN.setText("" + model.getValueAt(rowindex, 6));
+            checkOUT.setText("" + model.getValueAt(rowindex, 7));
+            rprice.setText(""+model.getValueAt(rowindex, 8));
+            paid.setText(""+model.getValueAt(rowindex, 9));
+            discount.setText("" + model.getValueAt(rowindex, 10));
+            status.setText(""+model.getValueAt(rowindex, 12));
+            clientid.setText(""+model.getValueAt(rowindex, 13));
+            
+            int roomPrice = Integer.parseInt(rprice.getText());
+            int totalRoomPrice = roomPrice * getDays();
+            int amountPaid = Integer.parseInt(paid.getText());
+
+            double discountDouble = Double.parseDouble(discount.getText());
+            double totalRoomPriceDouble = Double.parseDouble(String.valueOf(totalRoomPrice));
+            double discountValue = totalRoomPriceDouble * (discountDouble / 100);
+
+            int finalDiscountValue = (int) Math.ceil(discountValue);
+            int discounted = totalRoomPrice - finalDiscountValue;
+            int change = discounted - amountPaid;
+            
+            tprice.setText(String.valueOf(change));
+            rptotal.setText(String.valueOf(discounted));
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(Clients.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -523,12 +583,10 @@ public class Clients extends javax.swing.JInternalFrame {
         rptotal.setText("");
         paid.setText("");
         tprice.setText("");
+        clientid.setText("");
+        discount.setText("");
 
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        TableRowSorter<DefaultTableModel> model1 = new TableRowSorter<>(model);
-        jTable1.setRowSorter(model1);
-        model1.setRowFilter(null);
+        
 
         displayData();
     }//GEN-LAST:event_btn_refreshActionPerformed
@@ -542,102 +600,59 @@ public class Clients extends javax.swing.JInternalFrame {
         String gno = govno.getText();
         String in = checkIN.getText();
         String out = checkOUT.getText();
-        
+        String clientID = clientid.getText();
         if(rnum.isEmpty()){
             JOptionPane.showMessageDialog(this,"Please Select A Row.");
         }else{
-            int rp = Integer.parseInt(rprice.getText());
-            int pd = Integer.parseInt(paid.getText());
-            int trprice = 0;
-            int tpc = 0;
-           try {
-                trprice = rp * getDays();
-                tpc = trprice - pd ;
-            
-            }catch (ParseException ex) {
-            Logger.getLogger(Clients.class.getName()).log(Level.SEVERE, null, ex);
-                }
-        
-            int tp = Integer.parseInt(tprice.getText());
-            rptotal.setText(String.valueOf(trprice));
-            tprice.setText(String.valueOf(tpc));
-        
-        dbc.updateData("UPDATE client SET roomno= '"+rnum+"', Fullname= '"+fname+"', Cnumber= '"+num+"', Address= '"+add+"', "
-            + "GovType= '"+gtype+"', GovID = '"+gno+"', CheckIN= '"+in+"', CheckOUT= '"+out+"', Rprice='"+rp+"', "
-            + "Rtotal= '"+trprice+"', Paid= '"+pd+"', TOTAL= '"+tpc+"' WHERE roomno= '"+rnum+"' ");
+        int paidAmount = Integer.parseInt(paid.getText());
+        int pending = Integer.parseInt(tprice.getText());
+        dbc.updateData("UPDATE client SET "
+                + "roomno= '"+rnum+"', "
+                + "Fullname= '"+fname+"', "
+                + "Cnumber= '"+num+"', "
+                + "Address= '"+add+"', "
+                + "GovType= '"+gtype+"', "
+                + "GovID = '"+gno+"', "
+                + "CheckIN= '"+in+"', "
+                + "CheckOUT= '"+out+"', "
+                + "Paid= '"+paidAmount+"', "
+                + "TOTAL= '"+pending+"' "
+                + "WHERE clientid= '"+clientID+"' ");
         }
         displayData();
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
-        int result = JOptionPane.showConfirmDialog(null,"Sure? Want to Save Changes?", "CONFIRMATION",
-          JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-             switch (result) {
-                 case JOptionPane.YES_OPTION -> {
-                       
-                      paid.setText(String.valueOf(paid2.getText()));
-                      tprice.setText(String.valueOf(pend.getText()));
-                 }
-                 case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
-                 case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
-                 default -> {
-                 }
-        
-             }
-        
-        jDialog1.dispose();
-
-    }//GEN-LAST:event_jLabel13MouseClicked
-
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         String rnum = roomno.getText();
-        int tot = Integer.parseInt(tprice.getText());
-        if(tot==0){
+  
+        
+        if(rnum.isEmpty()){
+            JOptionPane.showMessageDialog(this,"Please Select A Row.");
+        }else if(!tprice.getText().isEmpty() && Integer.parseInt(tprice.getText()) <= 0){
             JOptionPane.showMessageDialog(this,"This Client Already Fully Paid.");
             evt.consume();
-        }
-        else if(rnum.isEmpty()){
-            JOptionPane.showMessageDialog(this,"Please Select A Row.");
         }else{
-            
-            
-            String fname = fullname.getText();
-            int rp = Integer.parseInt(rprice.getText());
             int rptot = Integer.parseInt(rptotal.getText());
+            int rp = Integer.parseInt(rprice.getText());
             int pd = Integer.parseInt(paid.getText());
             int totalprice = rptot - pd;
-            
-            roomno1.setText(rnum);
-            fullname1.setText(fname);
-            rprice1.setText(String.valueOf(rp));
-            rtotal2.setText(String.valueOf(rptot));
-            tprice1.setText(String.valueOf(rptot));
-            paid2.setText(String.valueOf(pd));
-            pend.setText(String.valueOf(totalprice));
-            jDialog1.pack();
-            jDialog1.setVisible(true);
-            jDialog1.toFront();
+
+                clientid1.setVisible(false);
+                clientid1.setText(clientid.getText());
+                roomno1.setText(roomno.getText());
+                fullname1.setText(fullname.getText());
+                rprice1.setText(String.valueOf(rp));
+                rtotal2.setText(String.valueOf(rptot));
+                tprice1.setText(String.valueOf(rptot));
+                paid2.setText(String.valueOf(pd));
+                pend.setText(String.valueOf(totalprice));
+                jDialog1.pack();
+                jDialog1.setLocationRelativeTo(null);
+                jDialog1.setVisible(true);
+                
         }
     }//GEN-LAST:event_jLabel1MouseClicked
-
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-                      int pd1 = Integer.parseInt(paid1.getText());
-                      int pd2 = Integer.parseInt(paid2.getText());
-                      int tp = Integer.parseInt(pend.getText());
-                      int totalpd = pd1+pd2;
-                      int totalprice = tp - pd1;
-                      paid2.setText(String.valueOf(totalpd));
-                      pend.setText(String.valueOf(totalprice));
-           
-            
-            
-    }//GEN-LAST:event_jLabel2MouseClicked
-
-    private void paid2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paid2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_paid2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
          String rnum = roomno.getText();
@@ -646,30 +661,144 @@ public class Clients extends javax.swing.JInternalFrame {
         if(rnum.isEmpty()){
             JOptionPane.showMessageDialog(this,"Please Select A Row.");
         }else{
-         try{
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/plasabas_db", "root", "");
-                        pst = con.prepareStatement("delete from client where roomno=?");
-                        pst.setString(1, clientid.getText());
-                        int rowsDeleted = pst.executeUpdate();
-                        if(rowsDeleted > 0){
-                        JOptionPane.showMessageDialog(null, "Deleted Successfully!");
-                        dbc.updateData("UPDATE room set status='"+avail+"' WHERE roomnumber ='"+rnum+"'");
-                        }else{
-                        System.out.println("Deletion Failed");
-                        }pst.close();
-                    }catch(HeadlessException | ClassNotFoundException | SQLException ex){
-                        System.out.println("Error: " + ex.getMessage());
-                            }
+           int result = dbc.deleteData("delete from client where clientid='"+clientid.getText()+"'");
+          
+           if(result == 1){
+               dbc.updateData("UPDATE room set status='" + avail + "' WHERE roomnumber ='" + rnum + "'");
+               displayData();
+           }
+           
         }
-                    displayData();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        String paidInput = paid1.getText();
+        int amountPaid = Integer.parseInt(paid2.getText());
+        int pending = Integer.parseInt(pend.getText());
+
+        if(paidInput.isEmpty() && pending > 0){
+            JOptionPane.showMessageDialog( null, "Please dont leave payment blank.", "Try Again", JOptionPane.ERROR_MESSAGE);
+        }else{
+            JOptionPane optionPane = new JOptionPane(
+                "Sure? Want to Save Changes?",
+                JOptionPane.QUESTION_MESSAGE,
+                JOptionPane.YES_NO_OPTION);
+
+            JDialog dialog = optionPane.createDialog("CONFIRMATION");
+
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+
+            int result = ((Integer) optionPane.getValue());
+            switch (result) {
+                case JOptionPane.YES_OPTION -> {
+
+                    dbc.updateData("Update client set Paid='"+amountPaid+"' where clientid='"+clientid1.getText()+"'");
+                }
+                case JOptionPane.NO_OPTION -> System.out.println("You Selected No");
+                case JOptionPane.CLOSED_OPTION -> System.out.println("You Closed the prompt");
+                default -> {}
+            }
+
+            jDialog1.dispose();
+        }
+    }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void paid1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paid1KeyTyped
+        char c = evt.getKeyChar();
+
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_paid1KeyTyped
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        String amountPaidField = paid1.getText().trim();
+        int totalPaid = Integer.parseInt(paid2.getText());
+        int pendingAmount = Integer.parseInt(pend.getText());
+        int totalCost = Integer.parseInt(tprice1.getText());
+
+        if (amountPaidField.isEmpty()) {
+            JOptionPane optionPane = new JOptionPane(
+                "Please don't leave the payment field blank.",
+                JOptionPane.ERROR_MESSAGE);
+
+            JDialog dialog = optionPane.createDialog("Try Again");
+
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+
+        } else {
+            JOptionPane optionPane = new JOptionPane(
+                "Want to add input as payment?",
+                JOptionPane.QUESTION_MESSAGE,
+                JOptionPane.YES_NO_OPTION);
+
+            JDialog dialog = optionPane.createDialog("CONFIRMATION");
+
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+
+            int result = ((Integer) optionPane.getValue());
+            switch (result) {
+                case JOptionPane.YES_OPTION -> {
+                    int amountPaid = Integer.parseInt(amountPaidField);
+                    int totalpd = totalPaid + amountPaid;
+                    int remainingPending = pendingAmount - amountPaid;
+
+                    if(totalpd <= totalCost+1000 && remainingPending < 0){
+                        int changeDifference = totalpd - totalCost;
+                        System.out.println(changeDifference); // For debugging purposes
+                        change.setText(String.valueOf(changeDifference));
+                        paid2.setText(String.valueOf(totalpd));
+                        pend.setText("0");
+                        paid1.setText("");
+                    }
+                    else if (totalpd > totalCost+1000 && remainingPending < 0) {
+                        JOptionPane alert = new JOptionPane(
+                            "Change must not exceed total price by 1000.",
+                            JOptionPane.ERROR_MESSAGE);
+
+                        JDialog alertDialog = alert.createDialog("CONFIRMATION");
+                        alertDialog.setAlwaysOnTop(true);
+                        alertDialog.setVisible(true);
+                    } else {
+                        paid2.setText(String.valueOf(totalpd));
+                        pend.setText(String.valueOf(remainingPending));
+                        paid1.setText("");
+                    }
+                }
+                case JOptionPane.NO_OPTION ->
+                System.out.println("You Selected No");
+                case JOptionPane.CLOSED_OPTION ->
+                System.out.println("You Closed the prompt");
+                default -> {
+                }
+            }
+        }
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void paid2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paid2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_paid2ActionPerformed
+
+    private void jPanel2AncestorRemoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel2AncestorRemoved
+        change.setText("");
+        clientid1.setText("");
+        roomno1.setText("");
+        fullname1.setText("");
+        rprice1.setText("");
+        rtotal2.setText("");
+        tprice1.setText("");
+        paid2.setText("");
+        pend.setText("");
+    }//GEN-LAST:event_jPanel2AncestorRemoved
 
     private void jDialog1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDialog1MouseDragged
         int coordX = evt.getXOnScreen();
         int coordY = evt.getYOnScreen();
-        
-        this.setLocation(coordX-mouseX, coordY-mouseY);
+
+        jDialog1.setLocation(coordX-mouseX, coordY-mouseY);
     }//GEN-LAST:event_jDialog1MouseDragged
 
     private void jDialog1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDialog1MousePressed
@@ -681,10 +810,13 @@ public class Clients extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea address;
     private javax.swing.JButton btn_refresh;
+    private javax.swing.JTextField change;
     private javax.swing.JTextField checkIN;
     private javax.swing.JTextField checkOUT;
     private javax.swing.JTextField clientid;
+    private javax.swing.JTextField clientid1;
     private javax.swing.JTextField cnum;
+    private javax.swing.JLabel discount;
     private javax.swing.JTextField fullname;
     private javax.swing.JTextField fullname1;
     private javax.swing.JTextField govno;
@@ -718,6 +850,7 @@ public class Clients extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;

@@ -36,6 +36,9 @@ public class ManageRooms extends javax.swing.JInternalFrame {
         jTable2.setDefaultEditor(Object.class, null);
         typeid.setVisible(false);
         roomid.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
+
         ComboBoxUpdate();
         displayData();
         displayTypes();
@@ -371,18 +374,16 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
                 int row=jTable1.getSelectedRow();
                 
-                roomno.setText(""+model.getValueAt(row, 0));
-                String s2 = (String.valueOf(model.getValueAt(row, 2)));
-                String s3=(String) model.getValueAt(row,3);
-
-                if(s3.equalsIgnoreCase("occupied"))
+                String status =(String) model.getValueAt(row,3);
+                
+                if(status.equalsIgnoreCase("occupied"))
                 JOptionPane.showMessageDialog(this,"Occupied! Unable to update selected room.");
                 else{
-
- 
+                    roomno.setText("" + model.getValueAt(row, 0));
                     ctype.setSelectedItem(model.getValueAt(row, 1));
-                    txtprice.setText(s2);
-
+                    txtprice.setText("" + model.getValueAt(row, 2));
+                    roomid.setText("" + model.getValueAt(row, 4));
+                    jButton4.setVisible(true);
                 }
             }
 
@@ -446,10 +447,10 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Room Number Already Exists.", "Try Again", JOptionPane.ERROR_MESSAGE);
             } else {
                 int roomprice = Integer.parseInt(txtprice.getText());
-                String avail = "Available";
-                dbc.updateData("UPDATE room SET roomtype= '" + ctype.getSelectedItem().toString() + "', price= '" + roomprice + "', status= '" + avail + "' "
-                        + "WHERE roomnumber='" + roomno.getText() + "' ");
+                dbc.updateData("UPDATE room SET roomnumber='"+roomno.getText()+"', roomtype='"+ctype.getSelectedItem().toString()+"', price='"+roomprice+"' "
+                        + "WHERE roomid='"+roomid.getText()+"' ");
                 displayData();
+                jButton4.setVisible(false);
                 txtprice.setText("");
                 roomno.setText("");
 
@@ -484,7 +485,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
                 int row = jTable2.getSelectedRow();
 
-                
+                jButton5.setVisible(true);
                 type.setText(""+ model.getValueAt(row,0));
                 price.setText(""+ model.getValueAt(row,1));
                 typeid.setText("" + model.getValueAt(row, 2));
@@ -546,7 +547,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 int typeprice = Integer.parseInt(price.getText());
                 dbc.updateData("UPDATE types SET type= '"+type.getText()+"', type_price= '"+typeprice+"' "
                         + "WHERE typeid='"+typeid.getText()+"' ");
-                
+                jButton5.setVisible(false);
                 type.setText("");
                 price.setText("");
                 typeid.setText("");

@@ -153,6 +153,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         checkoutDiscount = new javax.swing.JLabel();
         roomprice = new javax.swing.JLabel();
 
+        jDialog1.setAlwaysOnTop(true);
         jDialog1.setResizable(false);
         jDialog1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -519,26 +520,30 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         checkIN.setText("" + model.getValueAt(rowindex, 6));
         checkOUT.setText("" + model.getValueAt(rowindex, 7));
         roomprice.setText("" + model.getValueAt(rowindex, 8));
+        paid.setText("" + model.getValueAt(rowindex, 9));
         checkoutDiscount.setText(""+ model.getValueAt(rowindex, 10));
+        pendingPrice.setText("" + model.getValueAt(rowindex, 11));
         clientid.setText("" + model.getValueAt(rowindex, 13));
-
-        
-        int roomPrice = Integer.parseInt(""+model.getValueAt(rowindex, 8));
-        int totalDiscountedPrice = Integer.parseInt("" + model.getValueAt(rowindex, 11));
-        int paidAmount = Integer.parseInt("" + model.getValueAt(rowindex, 9));
-
-        rptotal.setText(String.valueOf(totalDiscountedPrice));
-        paid.setText(String.valueOf(paidAmount));
+       
 
         try {
-            int totalRoomPrice = roomPrice * getDays(); 
-            int pending = totalDiscountedPrice - paidAmount;
-            if(pending < 0){
-                pending = 0;
-            }
-            rprice.setText(String.valueOf(totalRoomPrice));
+            int roomPrice = Integer.parseInt(roomprice.getText());
+            int totalRoomPrice = roomPrice * getDays();        
+            
+            double discount = Double.parseDouble(checkoutDiscount.getText());
+            double totalRoomPriceDouble = Double.parseDouble(String.valueOf(totalRoomPrice));
+            double discountValue = totalRoomPriceDouble * (discount / 100);
+          
+            int finalDiscountValue = (int) Math.ceil(discountValue);
+            int discounted = totalRoomPrice - finalDiscountValue;
+            int amountPaid = Integer.parseInt(paid.getText());
+            int pending = discounted - amountPaid;
+            
             pendingPrice.setText(String.valueOf(pending));
-            if (pendingPrice.getText().equals("0")){
+            rprice.setText(String.valueOf(totalRoomPrice));
+            rptotal.setText(String.valueOf(discounted));
+
+            if (pending <= 0){
                 checkOutButton.setBackground(new Color(0, 153, 0));
                 receiptButton.setVisible(true);
                 receipt.setVisible(true);
@@ -722,10 +727,10 @@ public class CheckOUT extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Please Select A Row.");
         } else {
 
-            int rptot = Integer.parseInt(rptotal.getText());
+            int totalCost = Integer.parseInt(rptotal.getText());
             int tptot = Integer.parseInt(pendingPrice.getText());
 
-            if (tptot == 0) {
+            if (tptot <= 0) {
                 int result = JOptionPane.showConfirmDialog(null, "Fully paid. Want to Check out?", "CONFIRMATION",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
@@ -754,20 +759,20 @@ public class CheckOUT extends javax.swing.JInternalFrame {
             } else {
                 int rp = Integer.parseInt(rprice.getText());
                 int pd = Integer.parseInt(paid.getText());
-                int totalprice = rptot - pd;
+                int totalprice = totalCost - pd;
 
                 clientid1.setVisible(false);
                 clientid1.setText(clientid.getText());
                 roomno1.setText(roomno.getText());
                 fullname1.setText(fname);
                 rprice1.setText(String.valueOf(rp));
-                rtotal2.setText(String.valueOf(rptot));
-                tprice1.setText(String.valueOf(rptot));
+                rtotal2.setText(String.valueOf(totalCost));
+                tprice1.setText(String.valueOf(totalCost));
                 paid2.setText(String.valueOf(pd));
                 pend.setText(String.valueOf(totalprice));
                 jDialog1.pack();
+                jDialog1.setLocationRelativeTo(null);
                 jDialog1.setVisible(true);
-                jDialog1.setAlwaysOnTop(true);
             }
         }
         
@@ -803,7 +808,6 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         String roomNumber = roomno.getText();
         int paidAmount = Integer.parseInt(paid.getText().trim());
         int totalDue = Integer.parseInt(rptotal.getText());
-        int totalRoom = Integer.parseInt(totalRoomPrice);        
         int discountLabel = Integer.parseInt(checkoutDiscount.getText());
         int change  = totalDue - paidAmount;
         java.util.Date date = new java.util.Date();
@@ -831,18 +835,18 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                 receipt.setText(receipt.getText() + "*                                  CHPATEL HOTEL                            *\n");
                 receipt.setText(receipt.getText() + "*******************************************************************\n");
                 receipt.setText(receipt.getText() + "                          " + date + "\n\n");
-                receipt.setText(receipt.getText() + "                            Room: "+roomNumber+"\n");
-                receipt.setText(receipt.getText() + "                            Price: " + roomPrice + "\n");
+                receipt.setText(receipt.getText() + "                          Room: "+roomNumber+"\n");
+                receipt.setText(receipt.getText() + "                          Price: " + roomPrice + "\n");
             try {
-                receipt.setText(receipt.getText() + "                            Days: " + getDays() + "\n");
+                receipt.setText(receipt.getText() + "                          Days: " + getDays() + "\n");
             } catch (ParseException ex) {
                 Logger.getLogger(CheckOUT.class.getName()).log(Level.SEVERE, null, ex);
             }
-                receipt.setText(receipt.getText() + "                            Sub-total: " + totalRoomPrice + "\n");
-                receipt.setText(receipt.getText() + "                            Discount: " + discountAmount + "("+discountLabel+"%)\n");
-                receipt.setText(receipt.getText() + "                            TOTAL: " + totalDue + "\n");
-                receipt.setText(receipt.getText() + "                            Paid: " + paidAmount + "\n");
-                receipt.setText(receipt.getText() + "                            Change: " + change + "\n\n");
+                receipt.setText(receipt.getText() + "                          Sub-total: " + totalRoomPrice + "\n");
+                receipt.setText(receipt.getText() + "                          Discount: " + discountAmount + "("+discountLabel+"%)\n");
+                receipt.setText(receipt.getText() + "                          TOTAL: " + totalDue + "\n");
+                receipt.setText(receipt.getText() + "                          Paid: " + paidAmount + "\n");
+                receipt.setText(receipt.getText() + "                          Change: " + abs(change) + "\n\n");
                 receipt.setText(receipt.getText() + "                Thank you, and come again, " + firstName + "!");
 
                 
