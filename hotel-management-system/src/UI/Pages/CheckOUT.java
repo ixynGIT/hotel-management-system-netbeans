@@ -820,16 +820,9 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                           
                 double totalRoomPriceDouble = Double.parseDouble(totalRoomPrice);
                 double discount = Double.parseDouble(checkoutDiscount.getText().trim());
-                double discountValue = totalRoomPriceDouble - (totalRoomPriceDouble*(discount/100)); 
-                
-                if(discount == 0){
-                    discountValue = 0;
-                }
-                discountGlobal = (int) Math.ceil(discountValue);
-                String discountAmount = String.valueOf(discountGlobal);
-                if(discountAmount.equals(0)){
-                    discountAmount = "0";
-                }
+                double actualDiscount = totalRoomPriceDouble*(discount/100);
+                              
+                int actualDiscountValue = (int) Math.ceil(actualDiscount);
                 
                 receipt.setText("*******************************************************************\n");
                 receipt.setText(receipt.getText() + "*                                  CHPATEL HOTEL                            *\n");
@@ -843,7 +836,7 @@ public class CheckOUT extends javax.swing.JInternalFrame {
                 Logger.getLogger(CheckOUT.class.getName()).log(Level.SEVERE, null, ex);
             }
                 receipt.setText(receipt.getText() + "                          Sub-total: " + totalRoomPrice + "\n");
-                receipt.setText(receipt.getText() + "                          Discount: " + discountAmount + "("+discountLabel+"%)\n");
+                receipt.setText(receipt.getText() + "                          Discount: "+ actualDiscountValue +" | "+discountLabel+"%\n");
                 receipt.setText(receipt.getText() + "                          TOTAL: " + totalDue + "\n");
                 receipt.setText(receipt.getText() + "                          Paid: " + paidAmount + "\n");
                 receipt.setText(receipt.getText() + "                          Change: " + abs(change) + "\n\n");

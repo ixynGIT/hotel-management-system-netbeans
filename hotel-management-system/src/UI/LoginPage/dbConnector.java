@@ -48,7 +48,6 @@ public class dbConnector {
             try (PreparedStatement pst = connect.prepareStatement(sql)) {
                 int rowsUpdated = pst.executeUpdate();
                 if (rowsUpdated > 0){
-                    JOptionPane.showMessageDialog(null, "Data Updated Successfully!");
                     JOptionPane optionPane = new JOptionPane(
                             "Data Updated Successfully!",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -78,9 +77,8 @@ public class dbConnector {
         try {
             PreparedStatement pst = connect.prepareStatement(sql);
             pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Failed to Delete Data.");
                     JOptionPane optionPane = new JOptionPane(
-                            "Data Updated Successfully!",
+                            "Data Deleted Successfully!",
                             JOptionPane.INFORMATION_MESSAGE);
 
                     JDialog dialog = optionPane.createDialog("Try Again");
@@ -91,9 +89,8 @@ public class dbConnector {
             result=1;
             
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Data Failed Successfully!");
                     JOptionPane optionPane = new JOptionPane(
-                            "Data Updated Successfully!",
+                            "Failed to Delete Data.",
                             JOptionPane.ERROR_MESSAGE);
 
                     JDialog dialog = optionPane.createDialog("Try Again");

@@ -384,6 +384,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                     txtprice.setText("" + model.getValueAt(row, 2));
                     roomid.setText("" + model.getValueAt(row, 4));
                     jButton4.setVisible(true);
+                    jButton2.setVisible(false);
                 }
             }
 
@@ -451,6 +452,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                         + "WHERE roomid='"+roomid.getText()+"' ");
                 displayData();
                 jButton4.setVisible(false);
+                jButton2.setVisible(true);
                 txtprice.setText("");
                 roomno.setText("");
 
@@ -486,6 +488,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 int row = jTable2.getSelectedRow();
 
                 jButton5.setVisible(true);
+                jButton3.setVisible(false);              
                 type.setText(""+ model.getValueAt(row,0));
                 price.setText(""+ model.getValueAt(row,1));
                 typeid.setText("" + model.getValueAt(row, 2));
@@ -548,6 +551,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 dbc.updateData("UPDATE types SET type= '"+type.getText()+"', type_price= '"+typeprice+"' "
                         + "WHERE typeid='"+typeid.getText()+"' ");
                 jButton5.setVisible(false);
+                jButton3.setVisible(true);
                 type.setText("");
                 price.setText("");
                 typeid.setText("");
@@ -594,6 +598,11 @@ public class ManageRooms extends javax.swing.JInternalFrame {
         type.setText("");
         price.setText("");
         typeid.setText("");
+        jButton2.setVisible(true);
+        jButton3.setVisible(true);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
+
         displayTypes();
     }//GEN-LAST:event_jLabel10MouseClicked
 
