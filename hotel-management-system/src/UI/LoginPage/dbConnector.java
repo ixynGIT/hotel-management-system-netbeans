@@ -58,4 +58,21 @@ public class dbConnector {
             }  
     }
     
+    public int deleteData(String sql){
+        int result;
+        try {
+            PreparedStatement pst = connect.prepareStatement(sql);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data deleted successfully!");
+            pst.close();
+            result=1;
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Data failed to delete.");
+            System.out.println("Date failed to update: "+ e);
+            result=0;
+        }
+        return result;
+    }
+    
 }

@@ -34,7 +34,8 @@ public class ManageRooms extends javax.swing.JInternalFrame {
         bi.setNorthPane(null);
         jTable1.setDefaultEditor(Object.class, null);
         jTable2.setDefaultEditor(Object.class, null);
-        
+        typeid.setVisible(false);
+        roomid.setVisible(false);
         ComboBoxUpdate();
         displayData();
         displayTypes();
@@ -104,6 +105,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
         jButton4 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
+        roomid = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -117,6 +119,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel10 = new javax.swing.JLabel();
+        typeid = new javax.swing.JLabel();
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -224,6 +227,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 390, -1, -1));
+        jPanel1.add(roomid, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 30, 60, 20));
 
         jTabbedPane1.addTab("Rooms", jPanel1);
 
@@ -311,6 +315,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, -1, -1));
+        jPanel2.add(typeid, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 180, 60, 20));
 
         jTabbedPane1.addTab("Room Type", jPanel2);
 
@@ -347,7 +352,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 roomnum=(String) dmodel.getValueAt(rows,0);
                 String s1=(String) dmodel.getValueAt(rows,3);
                 if(s1.equalsIgnoreCase("occupied"))
-                JOptionPane.showMessageDialog(this,"Sorry Room is Occupied So unable to delete it");
+                JOptionPane.showMessageDialog(this,"Occupied! Unable to delete selected room.");
                 else{
 
                     try {
@@ -362,6 +367,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 }
             }
             else if(check.equalsIgnoreCase("update")){
+                
                 DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
                 int row=jTable1.getSelectedRow();
                 
@@ -370,7 +376,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                 String s3=(String) model.getValueAt(row,3);
 
                 if(s3.equalsIgnoreCase("occupied"))
-                JOptionPane.showMessageDialog(this,"Sorry Room is Occupied So unable to Update it");
+                JOptionPane.showMessageDialog(this,"Occupied! Unable to update selected room.");
                 else{
 
  
@@ -428,14 +434,37 @@ public class ManageRooms extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        int roomprice =  Integer.parseInt(txtprice.getText());
-        String avail = "Available";
-        dbc.updateData("UPDATE room SET roomtype= '"+ctype.getSelectedItem().toString()+"', price= '"+roomprice+"', status= '"+avail+"' "
-            + "WHERE roomnumber='"+roomno.getText()+"' ");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/plasabas_db", "root", "");
+            pst = con.prepareStatement("select * from room where roomnumber=? AND roomid != ?");
+            pst.setString(1, roomno.getText());
+            pst.setString(2, roomid.getText());
+
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(null, "Room Number Already Exists.", "Try Again", JOptionPane.ERROR_MESSAGE);
+            } else {
+                int roomprice = Integer.parseInt(txtprice.getText());
+                String avail = "Available";
+                dbc.updateData("UPDATE room SET roomtype= '" + ctype.getSelectedItem().toString() + "', price= '" + roomprice + "', status= '" + avail + "' "
+                        + "WHERE roomnumber='" + roomno.getText() + "' ");
+                displayData();
+                txtprice.setText("");
+                roomno.setText("");
+
+            }
+
+        } catch (ClassNotFoundException | HeadlessException | SQLException ex) {
+            System.out.println("Error:" + ex.getMessage());
+        }
+        
+       
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        
         if(evt.getClickCount() == 2){
             String check=JOptionPane.showInputDialog(this,"Type 'Delete' to remove selected row permanently.\n"
                 + "Type 'Update' to configure selected row.");
@@ -445,38 +474,28 @@ public class ManageRooms extends javax.swing.JInternalFrame {
             }
             
             else if(check.equalsIgnoreCase("delete")){
-                DefaultTableModel dmodel=(DefaultTableModel) jTable2.getModel();
-                int rows=jTable2.getSelectedRow();
-                String s1 =(String) dmodel.getValueAt(rows,0);
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/plasabas_db", "root", "");
-                    pst = con.prepareStatement("delete from types where type=?");
-                    pst.setString(1, s1);
-                    pst.executeUpdate();
-                    displayTypes();
-                }
-                catch(ClassNotFoundException | SQLException ex){}
-            }
-            else if(check.equalsIgnoreCase("update")){
                 DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
-                int row=jTable1.getSelectedRow();
-                String s1 =(String) model.getValueAt(row,0);
-                String s2 = (String.valueOf(model.getValueAt(row, 1)));
+                int rows=jTable2.getSelectedRow();
+                int typeID = Integer.parseInt(("" + model.getValueAt(rows,2)));
+               
+                dbc.deleteData("delete from types where typeid='"+typeID+"' ");
                 
-                type.setText(s1);
-                price.setText(s2);
-                type.setEditable(false);
+            }else if(check.equalsIgnoreCase("update")){
+                DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
+                int row = jTable2.getSelectedRow();
+
+                
+                type.setText(""+ model.getValueAt(row,0));
+                price.setText(""+ model.getValueAt(row,1));
+                typeid.setText("" + model.getValueAt(row, 2));
+                
             }
 
         }
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if(type.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "All Field is Required");
-            type.requestFocus();
-        }else if(price.getText().equals("")){
+        if(type.getText().trim().isEmpty() || price.getText().trim().isEmpty()){
             JOptionPane.showMessageDialog(this, "All Field is Required");
             type.requestFocus();
         }else{
@@ -502,6 +521,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                     displayData();
                     txtprice.setText("");
                     roomno.setText("");
+                    typeid.setText("");
                 }
             } catch (ClassNotFoundException | HeadlessException |SQLException ex) {
                 System.out.println("Error:" + ex.getMessage());
@@ -511,17 +531,37 @@ public class ManageRooms extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        int typeprice =  Integer.parseInt(price.getText());
-        dbc.updateData("UPDATE types SET type= '"+type.getText()+"', price= '"+typeprice+"' "
-            + "WHERE roomnumber='"+roomno.getText()+"' ");
-        type.setEditable(true);
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/plasabas_db", "root", "");
+            pst = con.prepareStatement("select * from types where type=? AND typeid != ?");
+            pst.setString(1, type.getText());
+            pst.setString(2, typeid.getText());
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(null, "Redundant Room Type.", "Try Again", JOptionPane.ERROR_MESSAGE);
+            } else {
+                int typeprice = Integer.parseInt(price.getText());
+                dbc.updateData("UPDATE types SET type= '"+type.getText()+"', type_price= '"+typeprice+"' "
+                        + "WHERE typeid='"+typeid.getText()+"' ");
+                
+                type.setText("");
+                price.setText("");
+                typeid.setText("");
+            }
+        } catch (ClassNotFoundException | HeadlessException | SQLException ex) {
+            System.out.println("Error:" + ex.getMessage());
+        }
+       
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
        displayData();
   
        roomno.setText("");
-       ctype.setSelectedItem("");
        price.setText("");
         
        try {
@@ -552,7 +592,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         type.setText("");
         price.setText("");
-        
+        typeid.setText("");
         displayTypes();
     }//GEN-LAST:event_jLabel10MouseClicked
 
@@ -600,8 +640,10 @@ public class ManageRooms extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField price;
+    private javax.swing.JLabel roomid;
     public javax.swing.JTextField roomno;
     public javax.swing.JTextField txtprice;
     private javax.swing.JTextField type;
+    private javax.swing.JLabel typeid;
     // End of variables declaration//GEN-END:variables
 }
