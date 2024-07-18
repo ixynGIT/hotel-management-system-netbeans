@@ -35,8 +35,9 @@ public class ManageRooms extends javax.swing.JInternalFrame {
         jTable1.setDefaultEditor(Object.class, null);
         jTable2.setDefaultEditor(Object.class, null);
         
+        ComboBoxUpdate();
         displayData();
-        displayData2();
+        displayTypes();
         
     }
     
@@ -49,7 +50,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
             System.out.println("Errors: "+ex.getMessage());
         }
     }
-   private void displayData2(){
+   private void displayTypes(){
         try{
             rs = dbc.getData("SELECT* FROM types");
            jTable2.setModel(DbUtils.resultSetToTableModel(rs));
@@ -453,7 +454,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
                     pst = con.prepareStatement("delete from types where type=?");
                     pst.setString(1, s1);
                     pst.executeUpdate();
-                    displayData2();
+                    displayTypes();
                 }
                 catch(ClassNotFoundException | SQLException ex){}
             }
@@ -552,7 +553,7 @@ public class ManageRooms extends javax.swing.JInternalFrame {
         type.setText("");
         price.setText("");
         
-        displayData2();
+        displayTypes();
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void ctypePopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_ctypePopupMenuWillBecomeVisible

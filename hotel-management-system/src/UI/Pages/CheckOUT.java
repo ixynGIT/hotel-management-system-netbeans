@@ -12,6 +12,8 @@ import static java.lang.Math.abs;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
@@ -28,7 +30,8 @@ public class CheckOUT extends javax.swing.JInternalFrame {
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
-    
+    final List<Object[]> originalData = new ArrayList<>();
+
     int mouseX;
     int mouseY;
     dbConnector dbc = new dbConnector();
@@ -37,7 +40,8 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         initComponents();
 
         displayData();
-        
+        storeOriginalData();
+
         this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
         BasicInternalFrameUI bi = (BasicInternalFrameUI)this.getUI();
         bi.setNorthPane(null);
@@ -47,6 +51,16 @@ public class CheckOUT extends javax.swing.JInternalFrame {
         checkoutDiscount.setVisible(false);
         roomprice.setVisible(false);
         jTable1.setDefaultEditor(Object.class, null);
+    }
+    private void storeOriginalData() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object[] rowData = new Object[model.getColumnCount()];
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                rowData[j] = model.getValueAt(i, j);
+            }
+            originalData.add(rowData);
+        }
     }
     
     private void displayData(){
@@ -386,6 +400,9 @@ public class CheckOUT extends javax.swing.JInternalFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField1FocusGained(evt);
             }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
         });
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -544,9 +561,24 @@ public class CheckOUT extends javax.swing.JInternalFrame {
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        TableRowSorter<DefaultTableModel> model1 = new TableRowSorter<>(model);
-        jTable1.setRowSorter(model1);
-        model1.setRowFilter(RowFilter.regexFilter("(?i)" + jTextField1.getText()));
+        String filterText = jTextField1.getText().toLowerCase();
+
+        // Remove all rows from the model
+        model.setRowCount(0);
+
+        // Add the original rows back to the model
+        for (Object[] row : originalData) {
+            boolean matches = false;
+            for (Object cell : row) {
+                if (cell.toString().toLowerCase().contains(filterText)) {
+                    matches = true;
+                    break;
+                }
+            }
+            if (matches) {
+                model.addRow(row);
+            }
+        }
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
@@ -823,6 +855,10 @@ public class CheckOUT extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_receiptButtonActionPerformed
+
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+        jTextField1.setText("Search");
+    }//GEN-LAST:event_jTextField1FocusLost
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
