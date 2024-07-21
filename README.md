@@ -1,6 +1,6 @@
 ## CHPATEL HOTEL MANAGEMENT SYSTEM
 
-A hotel management project completed in compliance with the final grading requirements for the school year 2022-2023.
+A hotel management project completed in compliance with the final grading requirements for the Academic Year 2022-2023.
 
 <br />
 
