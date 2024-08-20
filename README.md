@@ -1,6 +1,6 @@
 ## CHPATEL HOTEL MANAGEMENT SYSTEM
 
-A hotel management project completed in compliance with the final grading requirements for the Academic Year 2022-2023.
+A Chpatel hotel management system is a free system tailored for managing a hotel. This is made particularly for educational purposes. You are free to use and improve this system.
 
 <br />
 
