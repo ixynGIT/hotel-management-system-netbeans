@@ -20,6 +20,8 @@ A Chpatel hotel management system is a free system tailored for managing a hotel
     
 3. Open the project `Ctrl+Shift+O`
    Navigate through the cloned project and access the project folder.
+   
+5. Download the `plasabas_db.sql` file and import it in your mysql app of choice.
 
 <br />
 
